@@ -34,112 +34,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 526,
+   "execution_count": null,
    "id": "71bea866-4c28-4fc7-a447-f6f1790c1e7f",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "id :  int64\n",
-      "track_name :  object\n",
-      "size_bytes :  int64\n",
-      "currency :  object\n",
-      "price :  float64\n",
-      "rating_count_tot :  int64\n",
-      "rating_count_ver :  int64\n",
-      "user_rating :  float64\n",
-      "user_rating_ver :  float64\n",
-      "ver :  object\n",
-      "cont_rating :  object\n",
-      "prime_genre :  object\n",
-      "sup_devices.num :  int64\n",
-      "ipadSc_urls.num :  int64\n",
-      "lang.num :  int64\n",
-      "vpp_lic :  int64\n",
-      "\n",
-      "\n",
-      "          id               track_name  size_bytes currency  price  \\\n",
-      "0  284882215                 Facebook   389879808      USD    0.0   \n",
-      "1  389801252                Instagram   113954816      USD    0.0   \n",
-      "2  529479190           Clash of Clans   116476928      USD    0.0   \n",
-      "3  420009108               Temple Run    65921024      USD    0.0   \n",
-      "4  284035177  Pandora - Music & Radio   130242560      USD    0.0   \n",
-      "\n",
-      "   rating_count_tot  rating_count_ver  user_rating  user_rating_ver      ver  \\\n",
-      "0           2974676               212          3.5              3.5     95.0   \n",
-      "1           2161558              1289          4.5              4.0    10.23   \n",
-      "2           2130805               579          4.5              4.5  9.24.12   \n",
-      "3           1724546              3842          4.5              4.0    1.6.2   \n",
-      "4           1126879              3594          4.0              4.5    8.4.1   \n",
-      "\n",
-      "  cont_rating        prime_genre  sup_devices.num  ipadSc_urls.num  lang.num  \\\n",
-      "0          4+  Social Networking               37                1        29   \n",
-      "1         12+      Photo & Video               37                0        29   \n",
-      "2          9+              Games               38                5        18   \n",
-      "3          9+              Games               40                5         1   \n",
-      "4         12+              Music               37                4         1   \n",
-      "\n",
-      "   vpp_lic  \n",
-      "0        1  \n",
-      "1        1  \n",
-      "2        1  \n",
-      "3        1  \n",
-      "4        1  \n",
-      "\n",
-      "\n",
-      "\n",
-      "\n",
-      "App :  object\n",
-      "Category :  object\n",
-      "Rating :  float64\n",
-      "Reviews :  object\n",
-      "Size :  object\n",
-      "Installs :  object\n",
-      "Type :  object\n",
-      "Price :  object\n",
-      "Content Rating :  object\n",
-      "Genres :  object\n",
-      "Last Updated :  object\n",
-      "Current Ver :  object\n",
-      "Android Ver :  object\n",
-      "\n",
-      "\n",
-      "                                                 App        Category  Rating  \\\n",
-      "0     Photo Editor & Candy Camera & Grid & ScrapBook  ART_AND_DESIGN     4.1   \n",
-      "1                                Coloring book moana  ART_AND_DESIGN     3.9   \n",
-      "2  U Launcher Lite – FREE Live Cool Themes, Hide ...  ART_AND_DESIGN     4.7   \n",
-      "3                              Sketch - Draw & Paint  ART_AND_DESIGN     4.5   \n",
-      "4              Pixel Draw - Number Art Coloring Book  ART_AND_DESIGN     4.3   \n",
-      "\n",
-      "  Reviews  Size     Installs  Type Price Content Rating  \\\n",
-      "0     159   19M      10,000+  Free     0       Everyone   \n",
-      "1     967   14M     500,000+  Free     0       Everyone   \n",
-      "2   87510  8.7M   5,000,000+  Free     0       Everyone   \n",
-      "3  215644   25M  50,000,000+  Free     0           Teen   \n",
-      "4     967  2.8M     100,000+  Free     0       Everyone   \n",
-      "\n",
-      "                      Genres      Last Updated         Current Ver  \\\n",
-      "0               Art & Design   January 7, 2018               1.0.0   \n",
-      "1  Art & Design;Pretend Play  January 15, 2018               2.0.0   \n",
-      "2               Art & Design    August 1, 2018               1.2.4   \n",
-      "3               Art & Design      June 8, 2018  Varies with device   \n",
-      "4    Art & Design;Creativity     June 20, 2018                 1.1   \n",
-      "\n",
-      "    Android Ver  \n",
-      "0  4.0.3 and up  \n",
-      "1  4.0.3 and up  \n",
-      "2  4.0.3 and up  \n",
-      "3    4.2 and up  \n",
-      "4    4.4 and up  \n",
-      "\n",
-      "\n",
-      "\n",
-      "\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "import pandas as pd\n",
     "\n",
@@ -169,31 +67,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 529,
+   "execution_count": null,
    "id": "2a161972-7e24-4668-b049-57389073bcb4",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "App               Life Made WI-Fi Touchscreen Photo Frame\n",
-      "Category                                              1.9\n",
-      "Rating                                               19.0\n",
-      "Reviews                                              3.0M\n",
-      "Size                                               1,000+\n",
-      "Installs                                             Free\n",
-      "Type                                                    0\n",
-      "Price                                            Everyone\n",
-      "Content Rating                                        NaN\n",
-      "Genres                                  February 11, 2018\n",
-      "Last Updated                                       1.0.19\n",
-      "Current Ver                                    4.0 and up\n",
-      "Android Ver                                           NaN\n",
-      "Name: 10472, dtype: object\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "# lack of data identified at data source - on https://www.kaggle.com/datasets/lava18/google-play-store-apps/discussion/164101\n",
     "\n",
@@ -203,19 +80,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 531,
+   "execution_count": null,
    "id": "233f28e6-728d-4165-9d08-ab936e192641",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Liczba duplikatów w zbiorze Google Play Store: 1181\n",
-      "Liczba duplikatów w zbiorze Apple Store: 0\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "#checking for duplicated app rows\n",
     "\n",
@@ -225,20 +93,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 533,
+   "execution_count": null,
    "id": "8ab25479-4415-47b8-b6db-3145bb76e37f",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "10840\n",
-      "9659\n",
-      "7197\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "# leaving most recent entries - with the biggest number of reviews\n",
     "\n",
@@ -251,19 +109,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 535,
+   "execution_count": null,
    "id": "5c497d79-4823-43ec-a226-824cff587644",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "9597\n",
-      "6155\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "# keeping only apps for English audience - remove apps with more than 3 characters that are not commonly used in english alphabet [ outside of 0-127 ASCII code ] in their names\n",
     "\n",
@@ -286,43 +135,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 537,
+   "execution_count": null,
    "id": "c8954b35-4243-423c-9616-cf4026fe1316",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "2989    0\n",
-      "4970    0\n",
-      "2723    0\n",
-      "3079    0\n",
-      "3229    0\n",
-      "       ..\n",
-      "2465    0\n",
-      "9925    0\n",
-      "9928    0\n",
-      "9929    0\n",
-      "7101    0\n",
-      "Name: Price, Length: 9597, dtype: object\n",
-      "8846\n",
-      "0       0.00\n",
-      "1       0.00\n",
-      "2       0.00\n",
-      "3       0.00\n",
-      "4       0.00\n",
-      "        ... \n",
-      "7182    2.99\n",
-      "7186    2.99\n",
-      "7192    0.00\n",
-      "7194    0.00\n",
-      "7195    0.00\n",
-      "Name: price, Length: 6155, dtype: float64\n",
-      "3203\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "# only free apps\n",
     "\n",
@@ -347,20 +163,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 540,
+   "execution_count": null,
    "id": "32f12c21-1831-40a6-8d3b-bc16a568c791",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "[('Tools', 746), ('Entertainment', 538), ('Education', 474), ('Business', 407)]\n",
-      "[('FAMILY', 1679), ('GAME', 855), ('TOOLS', 747), ('BUSINESS', 407)]\n",
-      "[('Games', 1866), ('Entertainment', 251), ('Photo & Video', 160), ('Education', 118)]\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "# Frequency tables for the prime_genre column of the App Store data set, and the Genres and Category columns of the Google Play data set.\n",
     "\n",
@@ -387,20 +193,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 542,
+   "execution_count": null,
    "id": "e9ae0826-9f99-4d50-b900-13b6042e322e",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "[('Tools', 8.43), ('Entertainment', 6.08), ('Education', 5.36), ('Business', 4.6)]\n",
-      "[('FAMILY', 18.98), ('GAME', 9.67), ('TOOLS', 8.44), ('BUSINESS', 4.6)]\n",
-      "[('Games', 58.26), ('Entertainment', 7.84), ('Photo & Video', 5.0), ('Education', 3.68)]\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "#2nd way, with option to present data in procenatges values\n",
     "\n",
@@ -479,45 +275,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 553,
+   "execution_count": null,
    "id": "b97bf44f-f61b-4dfa-a5cd-86c13c0608c1",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Most often installed apps Category from Google Play Store:                    Installs    Rating\n",
-      "Category                             \n",
-      "COMMUNICATION  3.859058e+07  4.126923\n",
-      "VIDEO_PLAYERS  2.472787e+07  4.043448\n",
-      "SOCIAL         2.325365e+07  4.252736\n",
-      "PHOTOGRAPHY    1.780563e+07  4.166129 \n",
-      "\n",
-      "Best rated apps Category from Google Play Store:                          Installs    Rating\n",
-      "Category                                   \n",
-      "EVENTS               2.535422e+05  4.435556\n",
-      "BOOKS_AND_REFERENCE  8.814200e+06  4.347799\n",
-      "EDUCATION            1.820673e+06  4.344660\n",
-      "PARENTING            5.426036e+05  4.339583 \n",
-      "\n",
-      "Most often installed apps Genre from Google Play Store:                                   Installs    Rating\n",
-      "Genres                                              \n",
-      "Communication                 3.859058e+07  4.126923\n",
-      "Adventure;Action & Adventure  3.533333e+07  4.400000\n",
-      "Video Players & Editors       2.494734e+07  4.043357\n",
-      "Social                        2.325365e+07  4.252736 \n",
-      "\n",
-      "Best rated apps Genre from Google Play Store:                               Installs  Rating\n",
-      "Genres                                        \n",
-      "Comics;Creativity              50000.0     4.8\n",
-      "Health & Fitness;Education    100000.0     4.7\n",
-      "Puzzle;Education              100000.0     4.6\n",
-      "Strategy;Action & Adventure  1000000.0     4.6 \n",
-      "\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "def attract(dataset, grouping, how_much, rating):\n",
     "    popularity = dataset.groupby(grouping)[[how_much]].mean()\n",
@@ -538,31 +299,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 555,
+   "execution_count": null,
    "id": "e50fdb57-d7b6-43d2-83e8-7dd7e919ac74",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Most often rated apps Genre from Apple Store:                    rating_count_tot  user_rating\n",
-      "prime_genre                                     \n",
-      "Navigation             86090.333333     3.833333\n",
-      "Reference              79350.470588     3.882353\n",
-      "Social Networking      71548.349057     3.594340\n",
-      "Music                  57326.530303     3.946970 \n",
-      "\n",
-      "Best rated apps Genre from Apple Store:               rating_count_tot  user_rating\n",
-      "prime_genre                                \n",
-      "Catalogs           4004.000000     4.125000\n",
-      "Games             22886.367095     4.051715\n",
-      "Productivity      21028.410714     4.000000\n",
-      "Shopping          27230.734940     3.975904 \n",
-      "\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "AppleStore_attract = attract(AppleStore, 'prime_genre', 'rating_count_tot', 'user_rating')\n",
     "print('Most often rated apps Genre from Apple Store:', AppleStore_attract.sort_values(by='rating_count_tot', ascending=False)[:4], '\\n')\n",
