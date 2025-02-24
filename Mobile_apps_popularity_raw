@@ -1,0 +1,615 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "e1a61103-bf7c-4141-9c66-ffbfda490097",
+   "metadata": {},
+   "source": [
+    "# Most popular apps in Google Play Store and Apple Store\n",
+    "Project goal is to find inspiration for development of the new app - one that will generate relatively big profit, based on the market demand.\n",
+    "\n",
+    "Given that all apps developed by company requesting this analysis are free to download and targeted at English-speaking audience, we will look at this category only.\n",
+    "\n",
+    "**We are be focusing on number of downloads and reviews** as best available indicator of market demand and we will dive deeper into **most poplar Generes.**\n",
+    "\n",
+    "Available data:\n",
+    "* 10,000 Android apps from Google Play - collected in August 2018\n",
+    "* 7,000 iOS apps from the App Store - collected in July 2017\n",
+    "\n",
+    "## Process:\n",
+    "1. Data review\n",
+    "2. Data cleaning\n",
+    "      * removing rows with lacking data and duplicates\n",
+    "      * keeping only targeted apps category - free and for English-speaking audience\n",
+    "3. Analysis of most popular app categories and their ratings "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e95f6bf9-6c53-4801-9b09-d9e54e398b3f",
+   "metadata": {},
+   "source": [
+    "## 1. Data review"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 526,
+   "id": "71bea866-4c28-4fc7-a447-f6f1790c1e7f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "id :  int64\n",
+      "track_name :  object\n",
+      "size_bytes :  int64\n",
+      "currency :  object\n",
+      "price :  float64\n",
+      "rating_count_tot :  int64\n",
+      "rating_count_ver :  int64\n",
+      "user_rating :  float64\n",
+      "user_rating_ver :  float64\n",
+      "ver :  object\n",
+      "cont_rating :  object\n",
+      "prime_genre :  object\n",
+      "sup_devices.num :  int64\n",
+      "ipadSc_urls.num :  int64\n",
+      "lang.num :  int64\n",
+      "vpp_lic :  int64\n",
+      "\n",
+      "\n",
+      "          id               track_name  size_bytes currency  price  \\\n",
+      "0  284882215                 Facebook   389879808      USD    0.0   \n",
+      "1  389801252                Instagram   113954816      USD    0.0   \n",
+      "2  529479190           Clash of Clans   116476928      USD    0.0   \n",
+      "3  420009108               Temple Run    65921024      USD    0.0   \n",
+      "4  284035177  Pandora - Music & Radio   130242560      USD    0.0   \n",
+      "\n",
+      "   rating_count_tot  rating_count_ver  user_rating  user_rating_ver      ver  \\\n",
+      "0           2974676               212          3.5              3.5     95.0   \n",
+      "1           2161558              1289          4.5              4.0    10.23   \n",
+      "2           2130805               579          4.5              4.5  9.24.12   \n",
+      "3           1724546              3842          4.5              4.0    1.6.2   \n",
+      "4           1126879              3594          4.0              4.5    8.4.1   \n",
+      "\n",
+      "  cont_rating        prime_genre  sup_devices.num  ipadSc_urls.num  lang.num  \\\n",
+      "0          4+  Social Networking               37                1        29   \n",
+      "1         12+      Photo & Video               37                0        29   \n",
+      "2          9+              Games               38                5        18   \n",
+      "3          9+              Games               40                5         1   \n",
+      "4         12+              Music               37                4         1   \n",
+      "\n",
+      "   vpp_lic  \n",
+      "0        1  \n",
+      "1        1  \n",
+      "2        1  \n",
+      "3        1  \n",
+      "4        1  \n",
+      "\n",
+      "\n",
+      "\n",
+      "\n",
+      "App :  object\n",
+      "Category :  object\n",
+      "Rating :  float64\n",
+      "Reviews :  object\n",
+      "Size :  object\n",
+      "Installs :  object\n",
+      "Type :  object\n",
+      "Price :  object\n",
+      "Content Rating :  object\n",
+      "Genres :  object\n",
+      "Last Updated :  object\n",
+      "Current Ver :  object\n",
+      "Android Ver :  object\n",
+      "\n",
+      "\n",
+      "                                                 App        Category  Rating  \\\n",
+      "0     Photo Editor & Candy Camera & Grid & ScrapBook  ART_AND_DESIGN     4.1   \n",
+      "1                                Coloring book moana  ART_AND_DESIGN     3.9   \n",
+      "2  U Launcher Lite – FREE Live Cool Themes, Hide ...  ART_AND_DESIGN     4.7   \n",
+      "3                              Sketch - Draw & Paint  ART_AND_DESIGN     4.5   \n",
+      "4              Pixel Draw - Number Art Coloring Book  ART_AND_DESIGN     4.3   \n",
+      "\n",
+      "  Reviews  Size     Installs  Type Price Content Rating  \\\n",
+      "0     159   19M      10,000+  Free     0       Everyone   \n",
+      "1     967   14M     500,000+  Free     0       Everyone   \n",
+      "2   87510  8.7M   5,000,000+  Free     0       Everyone   \n",
+      "3  215644   25M  50,000,000+  Free     0           Teen   \n",
+      "4     967  2.8M     100,000+  Free     0       Everyone   \n",
+      "\n",
+      "                      Genres      Last Updated         Current Ver  \\\n",
+      "0               Art & Design   January 7, 2018               1.0.0   \n",
+      "1  Art & Design;Pretend Play  January 15, 2018               2.0.0   \n",
+      "2               Art & Design    August 1, 2018               1.2.4   \n",
+      "3               Art & Design      June 8, 2018  Varies with device   \n",
+      "4    Art & Design;Creativity     June 20, 2018                 1.1   \n",
+      "\n",
+      "    Android Ver  \n",
+      "0  4.0.3 and up  \n",
+      "1  4.0.3 and up  \n",
+      "2  4.0.3 and up  \n",
+      "3    4.2 and up  \n",
+      "4    4.4 and up  \n",
+      "\n",
+      "\n",
+      "\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "\n",
+    "def data_types(dataset):\n",
+    "    dt_data_type = dataset.dtypes.to_dict()\n",
+    "    for key in dt_data_type:\n",
+    "        print(key, \": \", dt_data_type[key])\n",
+    "    print (\"\\n\")\n",
+    "    print(dataset.head())\n",
+    "    print (\"\\n\")\n",
+    "    print (\"\\n\")\n",
+    "\n",
+    "AppleStore = pd.read_csv(\"c:\\\\Users\\\\kinga\\\\python\\\\tutorial_datasets\\\\AppleStore.csv\", encoding=\"utf8\")\n",
+    "data_types(AppleStore)\n",
+    "\n",
+    "GooglePlayStore = pd.read_csv(\"c:\\\\Users\\\\kinga\\\\python\\\\tutorial_datasets\\\\googleplaystore.csv\", encoding=\"utf8\")\n",
+    "data_types(GooglePlayStore)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fb121e6a-2863-4f2a-87e8-d175b27789d2",
+   "metadata": {},
+   "source": [
+    "## 2. Data cleaning"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 529,
+   "id": "2a161972-7e24-4668-b049-57389073bcb4",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "App               Life Made WI-Fi Touchscreen Photo Frame\n",
+      "Category                                              1.9\n",
+      "Rating                                               19.0\n",
+      "Reviews                                              3.0M\n",
+      "Size                                               1,000+\n",
+      "Installs                                             Free\n",
+      "Type                                                    0\n",
+      "Price                                            Everyone\n",
+      "Content Rating                                        NaN\n",
+      "Genres                                  February 11, 2018\n",
+      "Last Updated                                       1.0.19\n",
+      "Current Ver                                    4.0 and up\n",
+      "Android Ver                                           NaN\n",
+      "Name: 10472, dtype: object\n"
+     ]
+    }
+   ],
+   "source": [
+    "# lack of data identified at data source - on https://www.kaggle.com/datasets/lava18/google-play-store-apps/discussion/164101\n",
+    "\n",
+    "print(GooglePlayStore.loc[10472])\n",
+    "GooglePlayStore = GooglePlayStore.drop(10472)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 531,
+   "id": "233f28e6-728d-4165-9d08-ab936e192641",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Liczba duplikatów w zbiorze Google Play Store: 1181\n",
+      "Liczba duplikatów w zbiorze Apple Store: 0\n"
+     ]
+    }
+   ],
+   "source": [
+    "#checking for duplicated app rows\n",
+    "\n",
+    "print('Liczba duplikatów w zbiorze Google Play Store:', GooglePlayStore.duplicated(subset=GooglePlayStore.columns[0]).sum())\n",
+    "print('Liczba duplikatów w zbiorze Apple Store:', AppleStore.duplicated(subset=AppleStore.columns[0]).sum())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 533,
+   "id": "8ab25479-4415-47b8-b6db-3145bb76e37f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "10840\n",
+      "9659\n",
+      "7197\n"
+     ]
+    }
+   ],
+   "source": [
+    "# leaving most recent entries - with the biggest number of reviews\n",
+    "\n",
+    "print(len(GooglePlayStore))\n",
+    "GooglePlayStore = GooglePlayStore.sort_values(by='Reviews', ascending=False)\n",
+    "GooglePlayStore = GooglePlayStore.drop_duplicates(subset=GooglePlayStore.columns[0], keep='first')\n",
+    "print(len(GooglePlayStore))\n",
+    "print(len(AppleStore))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 535,
+   "id": "5c497d79-4823-43ec-a226-824cff587644",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "9597\n",
+      "6155\n"
+     ]
+    }
+   ],
+   "source": [
+    "# keeping only apps for English audience - remove apps with more than 3 characters that are not commonly used in english alphabet [ outside of 0-127 ASCII code ] in their names\n",
+    "\n",
+    "def if_english(string):\n",
+    "    non_eng_char = 0\n",
+    "    for char in string:\n",
+    "        if ord(char) > 127:\n",
+    "            non_eng_char += 1\n",
+    "    if non_eng_char <3:\n",
+    "        return True\n",
+    "    else:\n",
+    "        return False\n",
+    "\n",
+    "GooglePlayStore = GooglePlayStore[GooglePlayStore.iloc[:, 0].apply(if_english)]\n",
+    "AppleStore = AppleStore[AppleStore.iloc[:, 1].apply(if_english)]\n",
+    "        \n",
+    "print(len(GooglePlayStore))\n",
+    "print(len(AppleStore))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 537,
+   "id": "c8954b35-4243-423c-9616-cf4026fe1316",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2989    0\n",
+      "4970    0\n",
+      "2723    0\n",
+      "3079    0\n",
+      "3229    0\n",
+      "       ..\n",
+      "2465    0\n",
+      "9925    0\n",
+      "9928    0\n",
+      "9929    0\n",
+      "7101    0\n",
+      "Name: Price, Length: 9597, dtype: object\n",
+      "8846\n",
+      "0       0.00\n",
+      "1       0.00\n",
+      "2       0.00\n",
+      "3       0.00\n",
+      "4       0.00\n",
+      "        ... \n",
+      "7182    2.99\n",
+      "7186    2.99\n",
+      "7192    0.00\n",
+      "7194    0.00\n",
+      "7195    0.00\n",
+      "Name: price, Length: 6155, dtype: float64\n",
+      "3203\n"
+     ]
+    }
+   ],
+   "source": [
+    "# only free apps\n",
+    "\n",
+    "#print(GooglePlayStore.iloc[:, 7].dtype)\n",
+    "print(GooglePlayStore.iloc[:, 7])\n",
+    "GooglePlayStore = GooglePlayStore[GooglePlayStore.iloc[:, 7] == '0']\n",
+    "print(len(GooglePlayStore))\n",
+    "\n",
+    "#print(AppleStore.iloc[:, 4].dtype)\n",
+    "print(AppleStore.iloc[:, 4])\n",
+    "AppleStore = AppleStore[AppleStore.iloc[:, 4] == 0.0]\n",
+    "print(len(AppleStore))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "24da7629-22d1-4685-a635-2c14a0569446",
+   "metadata": {},
+   "source": [
+    "## 3. Analysis of most popular categories & average app ratings"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 540,
+   "id": "32f12c21-1831-40a6-8d3b-bc16a568c791",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[('Tools', 746), ('Entertainment', 538), ('Education', 474), ('Business', 407)]\n",
+      "[('FAMILY', 1679), ('GAME', 855), ('TOOLS', 747), ('BUSINESS', 407)]\n",
+      "[('Games', 1866), ('Entertainment', 251), ('Photo & Video', 160), ('Education', 118)]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Frequency tables for the prime_genre column of the App Store data set, and the Genres and Category columns of the Google Play data set.\n",
+    "\n",
+    "#1st way\n",
+    "def freq(dataset, column):\n",
+    "    freq = {}\n",
+    "    for data in dataset[column]:\n",
+    "        if data in freq:\n",
+    "            freq[data] += 1\n",
+    "        else:\n",
+    "            freq[data] = 1\n",
+    "    # sorting\n",
+    "    freq = dict(sorted(freq.items(), key=lambda item: item[1], reverse=True))\n",
+    "    return freq\n",
+    "        \n",
+    "GoogleStore_Genres = freq(GooglePlayStore, 'Genres')\n",
+    "GoogleStore_Category = freq(GooglePlayStore,'Category')\n",
+    "AppleStore_Genres = freq(AppleStore, 'prime_genre')\n",
+    "\n",
+    "print(list(GoogleStore_Genres.items())[:4])\n",
+    "print(list(GoogleStore_Category.items())[:4])\n",
+    "print(list(AppleStore_Genres.items())[:4])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 542,
+   "id": "e9ae0826-9f99-4d50-b900-13b6042e322e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[('Tools', 8.43), ('Entertainment', 6.08), ('Education', 5.36), ('Business', 4.6)]\n",
+      "[('FAMILY', 18.98), ('GAME', 9.67), ('TOOLS', 8.44), ('BUSINESS', 4.6)]\n",
+      "[('Games', 58.26), ('Entertainment', 7.84), ('Photo & Video', 5.0), ('Education', 3.68)]\n"
+     ]
+    }
+   ],
+   "source": [
+    "#2nd way, with option to present data in procenatges values\n",
+    "\n",
+    "def freq(dataset, column, procentages=True):\n",
+    "    freq = {}\n",
+    "    uniques = dataset[column].unique()\n",
+    "    if procentages:\n",
+    "        for one_uni in uniques:\n",
+    "            freq[one_uni] = round((len(dataset[dataset[column] == one_uni]) / len(dataset[column])*100),2)\n",
+    "    else:\n",
+    "        for one_uni in uniques:\n",
+    "            freq[one_uni] = len(dataset[dataset[column] == one_uni])\n",
+    "    # sorting, descending\n",
+    "    freq = dict(sorted(freq.items(), key=lambda item: item[1], reverse=True))\n",
+    "    return freq\n",
+    "        \n",
+    "GoogleStore_Genres = freq(GooglePlayStore, 'Genres')\n",
+    "GoogleStore_Category = freq(GooglePlayStore,'Category')\n",
+    "AppleStore_Genres = freq(AppleStore, 'prime_genre')\n",
+    "\n",
+    "print(list(GoogleStore_Genres.items())[:4])\n",
+    "print(list(GoogleStore_Category.items())[:4])\n",
+    "print(list(AppleStore_Genres.items())[:4])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f89e6ac4-e0ec-4630-945a-089f68a7ea70",
+   "metadata": {},
+   "source": [
+    "## Conclusions\n",
+    "\n",
+    "The most popular apps in **GooglePlayStore** are classified as:\n",
+    "belonging to *Category*:\n",
+    "* Family - 19,0%\n",
+    "* Game - 9,7%\n",
+    "* Education - 5,4%\n",
+    "\n",
+    "and based on *Genres*, the most pupular are:\n",
+    "* Tools - 8,4%\n",
+    "* Entertainment - 6,1%\n",
+    "* Education - 5,4%\n",
+    "\n",
+    "When it comes to **AppleStore**, most popular *Categories* are:\n",
+    "* Games - 58,3%\n",
+    "* Entertainment - 7,8%\n",
+    "* Photo&Video - 5%"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8df7bc26-038f-43bc-9b02-b66825213ae0",
+   "metadata": {},
+   "source": [
+    "Based on these findings we found out what are the most common apps in the AppleStore and GooglePlayStore.\n",
+    "\n",
+    "These findings tell us more about ***competitivness of the market*** - and how many apps we will compete with - rather than how many people were interested in them.\n",
+    "\n",
+    "\n",
+    "Based on that we can see that **Games are very popular choice for developers, taking 58,3% of space in free, English-based apps sector in Apple Store**.\n",
+    "\n",
+    "At first glance the numbers don't look so impressive for **Goole Play Store, with Games and Entertainment ranked as second, occupying 9,7% of Category and 6,1% Genre** of the space respectively. However, a brief qualitative analysis reveals that many apps in the Family category are also games designed for children.\n",
+    "\n",
+    "Overall, we can conclude that the largest group of games is focused on ***fun and entertainment***."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "97c82fd3-9126-40da-8e7c-55ecfed5ed6e",
+   "metadata": {},
+   "source": [
+    "To make sure that we look at ***actual demand and analyze users attraction***, we wanted to focus on `number of installs`. Unfortunately this variable is not provicded in AplleStore dataset, and due to that we needed to replace it with `rating count`.\n",
+    "\n",
+    "To make sure that these app are not only installed but liked and used over time, we also conducted analysis for `rating` itself.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 553,
+   "id": "b97bf44f-f61b-4dfa-a5cd-86c13c0608c1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Most often installed apps Category from Google Play Store:                    Installs    Rating\n",
+      "Category                             \n",
+      "COMMUNICATION  3.859058e+07  4.126923\n",
+      "VIDEO_PLAYERS  2.472787e+07  4.043448\n",
+      "SOCIAL         2.325365e+07  4.252736\n",
+      "PHOTOGRAPHY    1.780563e+07  4.166129 \n",
+      "\n",
+      "Best rated apps Category from Google Play Store:                          Installs    Rating\n",
+      "Category                                   \n",
+      "EVENTS               2.535422e+05  4.435556\n",
+      "BOOKS_AND_REFERENCE  8.814200e+06  4.347799\n",
+      "EDUCATION            1.820673e+06  4.344660\n",
+      "PARENTING            5.426036e+05  4.339583 \n",
+      "\n",
+      "Most often installed apps Genre from Google Play Store:                                   Installs    Rating\n",
+      "Genres                                              \n",
+      "Communication                 3.859058e+07  4.126923\n",
+      "Adventure;Action & Adventure  3.533333e+07  4.400000\n",
+      "Video Players & Editors       2.494734e+07  4.043357\n",
+      "Social                        2.325365e+07  4.252736 \n",
+      "\n",
+      "Best rated apps Genre from Google Play Store:                               Installs  Rating\n",
+      "Genres                                        \n",
+      "Comics;Creativity              50000.0     4.8\n",
+      "Health & Fitness;Education    100000.0     4.7\n",
+      "Puzzle;Education              100000.0     4.6\n",
+      "Strategy;Action & Adventure  1000000.0     4.6 \n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "def attract(dataset, grouping, how_much, rating):\n",
+    "    popularity = dataset.groupby(grouping)[[how_much]].mean()\n",
+    "    rating = dataset.groupby(grouping)[[rating]].mean()\n",
+    "    attract = pd.concat([popularity, rating], axis=1)\n",
+    "    return attract\n",
+    "\n",
+    "# we need to refine Installs data for GooglePlayStore prezentation to be able to aggregate the data\n",
+    "GooglePlayStore['Installs'] = GooglePlayStore['Installs'].str.replace(\",\", \"\").str.replace(\"+\", \"\").astype(int)\n",
+    "\n",
+    "GoogleStore_Category_attract = attract(GooglePlayStore, 'Category', 'Installs', 'Rating')\n",
+    "GoogleStore_Genres_attract = attract(GooglePlayStore, 'Genres', 'Installs', 'Rating')\n",
+    "print('Most often installed apps Category from Google Play Store:', GoogleStore_Category_attract.sort_values(by='Installs', ascending=False)[:4], '\\n')\n",
+    "print('Best rated apps Category from Google Play Store:', GoogleStore_Category_attract.sort_values(by='Rating', ascending=False)[:4], '\\n')\n",
+    "print('Most often installed apps Genre from Google Play Store:', GoogleStore_Genres_attract.sort_values(by='Installs', ascending=False)[:4], '\\n')\n",
+    "print('Best rated apps Genre from Google Play Store:', GoogleStore_Genres_attract.sort_values(by='Rating', ascending=False)[:4], '\\n')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 555,
+   "id": "e50fdb57-d7b6-43d2-83e8-7dd7e919ac74",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Most often rated apps Genre from Apple Store:                    rating_count_tot  user_rating\n",
+      "prime_genre                                     \n",
+      "Navigation             86090.333333     3.833333\n",
+      "Reference              79350.470588     3.882353\n",
+      "Social Networking      71548.349057     3.594340\n",
+      "Music                  57326.530303     3.946970 \n",
+      "\n",
+      "Best rated apps Genre from Apple Store:               rating_count_tot  user_rating\n",
+      "prime_genre                                \n",
+      "Catalogs           4004.000000     4.125000\n",
+      "Games             22886.367095     4.051715\n",
+      "Productivity      21028.410714     4.000000\n",
+      "Shopping          27230.734940     3.975904 \n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "AppleStore_attract = attract(AppleStore, 'prime_genre', 'rating_count_tot', 'user_rating')\n",
+    "print('Most often rated apps Genre from Apple Store:', AppleStore_attract.sort_values(by='rating_count_tot', ascending=False)[:4], '\\n')\n",
+    "print('Best rated apps Genre from Apple Store:', AppleStore_attract.sort_values(by='user_rating', ascending=False)[:4], '\\n')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c693eff2-2b10-48c8-a5dc-7110502175c5",
+   "metadata": {},
+   "source": [
+    "Based on these new findings, we can conclude that **Google Play Store customers prefer apps that help them connect with others** -apps in the Communication category are installed on average by the largest audience, and Social apps are ranked third in this context. Another potential direction to explore involves Video Players and Photography apps, which ranked second and fourth, respectively. Additionally, the **Book category stands out among the highest-rated apps.**\n",
+    "\n",
+    "In the **Apple Store**, navigation apps are the most frequently rated, but their average ratings are relatively low. **Music apps are quite popular and tend to receive high ratings.** Besides that, social apps also have a strong presence, ranking third in terms of average number of ratings."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "95bbe2d6-ab07-40fe-bc58-45dfb07718e2",
+   "metadata": {},
+   "source": [
+    "# Recommendations\n",
+    "\n",
+    "*New app direction proposition:* \n",
+    "**A gaming app based on book themes, enriched with soundtracks, and featuring elements of gamification and social interaction.**\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
