@@ -1,3 +1,16 @@
+/**
+ * This code is designed to be used within the Google Apps Script environment.
+ *
+ * It provides a dynamic form intended for managers to submit key information
+ * regarding a newly hired employee and the type of employment contract being established.
+ * The submitted data is both stored in a spreadsheet and used to automatically
+ * generate a PDF document, which must be signed and forwarded to the HR department.
+ *
+ * The form dynamically adjusts to support various types of employment and billing arrangements,
+ * ensuring that all required fields are completed and no critical information is missed.
+ */
+
+
 function getHtml() {
   return `
     <!DOCTYPE html>
@@ -646,8 +659,8 @@ function include(filename) {
 }
 
 function submitForm(data) {
-  const sheet = SpreadsheetApp.openById("1Uzc3sGcpn7yCQkLuVFQHPjo-aBX_Nby9J4zN46avJUE").getSheetByName("Formularze");
-  const folder = DriveApp.getFolderById("1I2_v6-H87D2cdfaGS31IUAM_OKpHHgsP");
+  const sheet = SpreadsheetApp.openById("ID_GOOGLE_SPREADSHEET").getSheetByName("GOOGLE_SPREADSHEET_SHEET_NAME"); # PUT YOUR DATA HERE
+  const folder = DriveApp.getFolderById(ID_GOOGLE_DRIVE"); # PUT YOUR DATA HERE
 
   const adresZamieszkania = `${data.adres_ulica} ${data.adres_nr}, ${data.adres_kod} ${data.adres_miasto}`;
   const adresDomowy = data.adres_domowy_ulica ? `${data.adres_domowy_ulica} ${data.adres_domowy_nr}, ${data.adres_domowy_kod} ${data.adres_domowy_miasto}` : "-";
