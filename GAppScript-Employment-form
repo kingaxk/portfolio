@@ -13,7 +13,7 @@
 
 function getHtml() {
   return `
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <base target="_top">
@@ -61,8 +61,26 @@ function getHtml() {
         font-weight: 500;
       }
 
-      select:required:invalid, input[type="date"]:invalid {
+      select:invalid, input[type="date"]:invalid {
         color: gray;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        background-color: #d4e7ff;
+        border-color: #ff5b5b;
+      }
+
+      form.was-validated input:invalid,
+      form.was-validated select:invalid,
+      form.was-validated textarea:invalid {
+        background-color: #ffecec !important;
+        border-color: #ff5b5b !important;
+      }
+
+      select option {
+        color: black;
       }
 
       input, select, textarea {
@@ -78,7 +96,14 @@ function getHtml() {
 
       textarea {
         resize: vertical;
+        max-width: 900px;
         min-height: 80px;
+      }
+
+      .row-flex {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;        
       }
 
       button {
@@ -108,6 +133,46 @@ function getHtml() {
         font-size: 13px;
         color: #777;
       }
+
+      input, select, textarea {
+        background-color: #f9fcff;
+        transition: background-color 0.2s ease;
+      }
+
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover, 
+      input:-webkit-autofill:focus, 
+      textarea:-webkit-autofill,
+      textarea:-webkit-autofill:hover,
+      textarea:-webkit-autofill:focus,
+      select:-webkit-autofill {
+        background-color: #eafcf1 !important;
+        box-shadow: 0 0 0px 1000px #f9fcff inset;
+        -webkit-box-shadow: 0 0 0px 1000px #f9fcff inset;
+        -webkit-text-fill-color: #333 !important;
+      }
+
+      input.filled,
+      select.filled,
+      textarea.filled {
+        background-color: #eafcf1; 
+      }
+
+      input[readonly], textarea[readonly], select[readonly] {
+        background-color: #eafcf1 !important;
+        color: #888 !important;
+        cursor: not-allowed;
+        border-style: dashed;
+      }
+
+      select.readonly {
+        pointer-events: none;
+        background-color: #eafcf1;
+        color: #888;
+        border-style: dashed;
+      }
+
+
 
       .adres-blok {
         margin-left: 20px;
@@ -150,14 +215,16 @@ function getHtml() {
       }
 
       .summary-item {
-        margin-bottom: 14px;
-        line-height: 1.6;
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        column-gap: 12px;
+        align-items: start;
       }
 
       .summary-label {
         font-weight: bold;
         display: inline-block;
-        min-width: 150px;
+        min-width: 200px;
         color: #1e6d91;
       }
 
@@ -184,462 +251,614 @@ function getHtml() {
         .summary-item {
       display: block;
       }
-}
+      }
 
-#summaryModal {
-  padding: 20px;
-}
-
+      #summaryModal {
+        padding: 20px;
+      }
 
     </style>
   </head>
+
   <body>
     <h2>Zgłoszenie nowego zatrudnienia</h2>
     <form id="hireForm">
+
       <section>
-  <h3>🧝 Dane pracownika</h3>
-  <label>Imię i nazwisko*:
-    <input name="imieNazwisko" required>
-  </label>
-  <label>PESEL*:
-    <input name="pesel" id="pesel" required maxlength="11" placeholder="np. 12345678901">
-  </label>
-  <label>Adres zamieszkania</label>
-  <div class="adres-blok">
-    <label>Ulica*:
-      <input name="adres_ulica" required>
-    </label>
-    <label>Nr domu / mieszkania*:
-      <input name="adres_nr" required>
-    </label>
-    <label>Kod pocztowy*:
-      <input name="adres_kod" id="kodPocztowy" required placeholder="00-000" maxlength="6">
-    </label>
-    <label>Miasto*:
-      <input name="adres_miasto" required>
-    </label>
-  </div>
-  <label>Nr telefonu*:
-    <input name="telefon" id="telefon" required placeholder="123 456 789" maxlength="11">
-  </label>
-</section>
+        <h3>🧍 Dane pracownika</h3>
 
-<section>
-  <h3>📁 Szczegóły współpracy</h3>
-  <div class="podsekcja">
-    <label>Stanowisko*:
-      <input name="stanowisko" required>
-    </label>
-    <label>Dział / Pion*:
-      <select name="dzial" required onchange="toggleInne('dzial', 'dzial_inne')">
-        <option value="" disabled selected hidden>Wybierz</option>
-        <option>Support</option>
-        <option>IT</option>
-        <option>Team Nauczycielski</option>
-        <option>Inne</option>
-      </select>
-    </label>
-    <div id="dzial_inne" class="wsuniecie" style="display:none;">
-      <label>Wpisz inny dział:
-        <input name="dzial_inne_input">
-      </label>
-    </div>
-    <label>Zakres obowiązków: <span class="optional">(opcjonalne)</span>
-      <textarea name="zakres"></textarea>
-    </label>
-  </div>
+        <label>Imię i nazwisko*:
+          <input name="imieNazwisko" required>
+        </label>
 
-  <div class="podsekcja">
-    <label>Spółka zatrudniająca*:
-      <select name="spolka" required>
-        <option value="" disabled selected hidden>Wybierz</option>
-        <option>Szkoła w Chmurze</option>
-        <option>Fundacja</option>
-      </select>
-    </label>
-    <label>Data podpisania umowy*:
-      <input type="date" name="dataZatrudnienia" required>
-    </label>
-    <label>Rodzaj umowy*:
-      <select name="rodzajUmowy" required onchange="toggleCzasTrwania(this.value)">
-        <option value="" disabled selected hidden>Wybierz</option>
-        <option>Umowa na okres próbny</option>
-        <option>Umowa na czas określony</option>
-        <option>Umowa na czas nieokreślony</option>
-      </select>
-    </label>
-    <label>Forma współpracy*:
-      <select name="forma" required onchange="toggleCzasPracy(this.value); toggleInne('forma', 'forma_inna')">
-        <option value="" disabled selected hidden>Wybierz</option>
-        <option>Umowa o pracę</option>
-        <option>Umowa B2B</option>
-        <option>Umowa zlecenie</option>
-        <option>Inne</option>
-      </select>
-    </label>
-    <div id="forma_inna" class="wsuniecie" style="display:none;">
-      <label>Opisz inną formę współpracy:
-        <input name="inna_forma_wspolpracy">
-      </label>
-    </div>
-  </div>
+        <label style="display: inline-flex; align-items:center; white-space: nowrap; margin: 5px 0;">
+          <input type="checkbox" id="isCompany" name="isCompany"
+                onchange="toggleCompanyFields(this.checked)"
+                style="margin: 0 5px 0 0;">
+          Zatrudniamy jako firmę (B2B)
+        </label>
 
-  <div id="czasTrwania">
-    <label>Data rozpoczęcia współpracy*:
-      <input type="date" name="od" required>
-    </label>
-    <div id="czasDoContainer">
-      <label>Umowna data zakończenia współpracy*:
-        <input type="date" name="do" required>
-      </label>
-    </div>
-  </div>
 
-  <div id="czasPracyContainer"></div>
+        <div id="individualFields">
+          <label>PESEL*:
+            <input name="pesel" id="pesel" required maxlength="11" placeholder="np. 12345678901">
+          </label>
+        </div>
 
-  <label>Premie / bonusy / inne: <span class="optional">(opcjonalne)</span>
-    <input name="premie">
-  </label>
-</section>
+        <div id="companyFields" style="display: none;">
+          <label>Nazwa firmy*:
+            <input name="nazwaFirmy" id="nazwaFirmy">
+          </label>
+          <label>NIP*:
+            <input name="nip" id="nip" maxlength="10" placeholder="np. 1234567890"  pattern="^\d{10}$" title="Wprowadź dokładnie 10 cyfr">
+          </label>
+        </div>
 
-<section>
-  <h3>🏢 Organizacja pracy</h3>
-  <label>Model miejsca pracy*:
-    <select name="model" required onchange="toggleMiejscePracy(this.value)">
-      <option value="" disabled selected hidden>Wybierz</option>
-      <option>Stacjonarny</option>
-      <option>Zdalny</option>
-      <option>Hybrydowy</option>
-    </select>
-  </label>
-  <div id="miejscePracy"></div>
-  <label>Przełożony*:
-    <input name="przelozony" required>
-  </label>
-  <label>Opiekun wdrożeniowy: <span class="optional">(opcjonalne)</span>
-    <input name="opiekun">
-  </label>
-  <label>Inne uwagi: <span class="optional">(opcjonalne)</span>
-    <textarea name="uwagi"></textarea>
-  </label>
-</section>
 
-<button type="button" onclick="showSummary()">Zapisz</button>
+        <label id="adresLabel">Adres zamieszkania</label>
+        <div class="adres-blok">
+          <label>Ulica*:
+            <input name="adres_ulica" required>
+          </label>
+          <label>Nr domu / mieszkania*:
+            <input name="adres_nr" required>
+          </label>
+          <label>Kod pocztowy*:
+            <input name="adres_kod" id="kodPocztowy" required placeholder="00-000" maxlength="6">
+          </label>
+          <label>Miasto*:
+            <input name="adres_miasto" required>
+          </label>
+        </div>
+
+        <label>Nr telefonu*:
+          <input name="telefon" id="telefon" required placeholder="123 456 789" maxlength="11" pattern="^\d{3} \d{3} \d{3}$" title="Wprowadź 9 cyfr (np. 123 456 789)">
+        </label>
+
+      </section>
+
+      <section>
+        <h3>📑 Szczegóły współpracy</h3>
+
+        <label>Stanowisko*:
+          <input name="stanowisko" required>
+        </label>
+
+        <label>Dział*:
+          <select name="dzial" required onchange="toggleInne('dzial', 'dzial_inne')">
+            <option value="" disabled selected hidden>Wybierz</option>
+            <option>Support</option>
+            <option>IT</option>
+            <option>Team Nauczycielski</option>
+            <option>Inne</option>
+          </select>
+        </label>
+
+        <div id="dzial_inne" class="wsuniecie" style="display:none;">
+          <label>Wpisz inny dział:
+            <input name="dzial_inne_input">
+          </label>
+        </div>
+
+        <div class="row-flex">
+          <label>Zakres obowiązków: <span class="optional">(opcjonalne)</span>
+            <textarea name="zakres"></textarea>
+          </label>
+        </div>
+
+        <label>Spółka zatrudniająca*:
+          <select name="spolka" required>
+            <option value="" disabled selected hidden>Wybierz</option>
+            <option>Szkoła w Chmurze</option>
+            <option>Fundacja</option>
+          </select>
+        </label>
+
+        <label>Data podpisania umowy*:
+          <input type="date" name="dataZatrudnienia" required>
+        </label>
+
+        <label>Rodzaj umowy*:
+          <select name="rodzajUmowy" required onchange="toggleCzasTrwania(this.value)">
+            <option value="" disabled selected hidden>Wybierz</option>
+            <option>Umowa na okres próbny</option>
+            <option>Umowa na czas określony</option>
+            <option>Umowa na czas nieokreślony</option>
+          </select>
+        </label>
+
+        <label>Forma współpracy*:
+          <select name="forma" required onchange="toggleCzasPracy(this.value); toggleInne('forma', 'forma_inna')">
+            <option value="" disabled selected hidden>Wybierz</option>
+            <option>Umowa o pracę</option>
+            <option>Umowa zlecenie</option>
+            <option>Umowa o dzieło</option>
+            <option>Inne</option>
+          </select>
+        </label>
+        <div id="forma_inna" class="wsuniecie" style="display:none;">
+          <label>Opisz inną formę współpracy:
+            <input name="inna_forma_wspolpracy">
+          </label>
+        </div>
+
+        <div id="czasTrwania">
+          <label>Data rozpoczęcia współpracy*:
+            <input type="date" name="od" required>
+          </label>
+          <div id="czasDoContainer">
+            <label>Umowna data zakończenia współpracy*:
+              <input type="date" name="do" required>
+            </label>
+          </div>
+        </div>
+
+        <div id="czasPracyContainer"></div>
+
+        <div class="row-flex">
+          <label>Premie / bonusy / inne: <span class="optional">(opcjonalne)</span>
+            <textarea name="premie"></textarea>
+          </label>
+        </div>
+
+      </section>
+
+      <section>
+        <h3>🏢 Organizacja pracy</h3>
+
+        <label>Model miejsca pracy*:
+          <select name="model" required onchange="toggleMiejscePracy(this.value)">
+            <option value="" disabled selected hidden>Wybierz</option>
+            <option>Stacjonarny</option>
+            <option>Zdalny</option>
+            <option>Hybrydowy</option>
+          </select>
+        </label>
+
+        <div id="miejscePracy"></div>
+        <label>Przełożony*:
+          <input name="przelozony" required>
+        </label>
+
+        <label>Opiekun wdrożeniowy: <span class="optional">(opcjonalne)</span>
+          <input name="opiekun">
+        </label>
+
+        <div class="row-flex">
+          <label>Inne uwagi: <span class="optional">(opcjonalne)</span>
+            <textarea name="uwagi"></textarea>
+          </label>
+        </div>
+
+      </section>
+
+    <button type="button" onclick="showSummary()">Zapisz</button>
 
     </form>
+    
     <div id="msg"></div>
 
-<div id="summaryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4); z-index:999; overflow-y: auto;">
-  <div style="background:white; max-width:600px; margin:40px auto; padding:30px; border-radius:10px; display:flex; flex-direction:column; gap:20px;">
-    <h3>📋 Podsumowanie zgłoszenia</h3>
-    <div id="summaryContent" style="flex: 1;"></div>
-    <div style="display:flex; justify-content:flex-end; gap:10px; padding-top: 10px; border-top: 1px solid #ddd;">
-      <button onclick="confirmSubmission()">📄 Zapisz i pobierz PDF</button>
-      <button onclick="closeSummary()">✖️ Wróć do edycji</button>
+    <div id="summaryModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4); z-index:999; overflow-y: auto;">
+      <div style="background:white; max-width:600px; margin:40px auto; padding:30px; border-radius:10px; display:flex; flex-direction:column; gap:20px;">
+        <h3>📋 Podsumowanie zgłoszenia</h3>
+        <div id="summaryContent" style="flex: 1;"></div>
+        <div style="display:flex; justify-content:flex-end; gap:10px; padding-top: 10px; border-top: 1px solid #ddd;">
+          <button onclick="confirmSubmission()">📄 Zapisz i pobierz PDF</button>
+          <button onclick="closeSummary()">✖️ Wróć do edycji</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+
+    <div id="loadingModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1001; justify-content:center; align-items:center;">
+      <div style="background:white; padding:30px 40px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.2); display:flex; flex-direction:column; align-items:center; gap:15px;">
+        <div class="spinner" style="border: 4px solid #e0e0e0; border-top: 4px solid #1e6d91; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;"></div>
+        <div style="font-size:16px; color:#1e6d91;">Tworzenie PDF…</div>
+      </div>
+    </div>
+
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
 
 
-<div id="successModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:1000; overflow-y:auto;">
-  <div style="background:white; max-width:600px; margin:60px auto; padding:30px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.2); display:flex; flex-direction:column; gap:20px;">
-    <h3>✅ Dokument zapisany</h3>
-    <p style="font-size:16px;">Plik został zapisany oraz pobrany automatycznie na Twoje urządzenie.</p>
-    <p style="font-size:16px;">📎 <a id="driveLink" href="#" target="_blank" style="color:#1e6d91; text-decoration:underline;">Otwórz dokument na Dysku Google</a></p>
-    <p style="font-size:15px;">✍️ <strong>Podpisz dokument i przekaż do działu Kadr.</strong></p>
-    <div style="display:flex; justify-content:flex-end;">
-      <button onclick="closeSuccessModal()">Zamknij</button>
+
+    <div id="successModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:1000; overflow-y:auto;">
+      <div style="background:white; max-width:600px; margin:60px auto; padding:30px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.2); display:flex; flex-direction:column; gap:20px;">
+        <h3>✅ Dokument zapisany</h3>
+        <p style="font-size:16px;">Plik został zapisany oraz pobrany automatycznie na Twoje urządzenie.</p>
+        <p style="font-size:16px;">📎 <a id="driveLink" href="#" target="_blank" style="color:#1e6d91; text-decoration:underline;">Otwórz dokument na Dysku Google</a></p>
+        <p style="font-size:15px;">✍️ <strong>Podpisz dokument i przekaż do działu Kadr.</strong></p>
+        <div style="display:flex; justify-content:flex-end;">
+          <button onclick="closeSuccessModal()">Zamknij</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
 
     <script>
-// === Obsługa dynamicznych pól ===
-function toggleInne(selectId, inputId) {
-  const select = document.querySelector(`select[name="${selectId}"]`);
-  const inne = document.getElementById(inputId);
-  inne.style.display = select.value === "Inne" ? "block" : "none";
-}
 
-function toggleCzasTrwania(rodzaj) {
-  const doContainer = document.getElementById("czasDoContainer");
-  if (rodzaj === "Umowa na czas nieokreślony") {
-    doContainer.style.display = "none";
-  } else if (document.querySelector('select[name="forma"]').value === "Inne") {
-    doContainer.style.display = "block";
-    doContainer.querySelector("input").removeAttribute("required");
-  } else {
-    doContainer.style.display = "block";
-    doContainer.querySelector("input").setAttribute("required", "true");
-  }
-}
+      // Nadanie klasy .filled po wypełnieniu pola
+      ["input", "change"].forEach(eventName => {
+        document.addEventListener("input", function (e) {
+          const el = e.target;
 
-function toggleMiejscePracy(model) {
-  const container = document.getElementById("miejscePracy");
-  container.innerHTML = "";
+          if (["INPUT", "SELECT", "TEXTAREA"].includes(el.tagName)) {
+            const hasValue = el.value && el.value.trim() !== "";
+            const isValid = el.checkValidity();
 
-  if (model === "Zdalny" || model === "Hybrydowy") {
-    container.innerHTML += `
-      <label class="wsuniecie">Adres domowy</label>
-      <div class="adres-domowy-blok">
-        <label>Ulica*:<input name="adres_domowy_ulica" required></label>
-        <label>Nr domu / mieszkania*:<input name="adres_domowy_nr" required></label>
-        <label>Kod pocztowy*:<input name="adres_domowy_kod" id="kodPocztowyDomowy" required maxlength="6"></label>
-        <label>Miasto*:<input name="adres_domowy_miasto" required></label>
-      </div>`;
-  }
+            if (hasValue && isValid) {
+              el.classList.add("filled");
+            } else {
+              el.classList.remove("filled");
+            }
+          }
+        });
+      }); 
 
-  if (model === "Stacjonarny" || model === "Hybrydowy") {
-    container.innerHTML += `
-      <div class="wsuniecie">
-        <label>Biuro firmowe*:
-          <select name="adres_biuro" required>
+
+
+      // === Obsługa dynamicznych pól ===
+      function toggleCompanyFields(isCompany) {
+        // Uchwyty do elementów
+        const peselBlock = document.getElementById("individualFields");
+        const companyBlock = document.getElementById("companyFields");
+        const adresLabel = document.getElementById("adresLabel");
+        const formaSelect = document.querySelector('select[name="forma"]');
+
+        if (isCompany) {
+          peselBlock.style.display = "none";
+          document.getElementById("pesel").removeAttribute("required");
+          document.getElementById("pesel").value = "";
+
+          companyBlock.style.display = "block";
+          document.getElementById("nazwaFirmy").setAttribute("required", "true");
+          document.getElementById("nip").setAttribute("required", "true");
+
+          adresLabel.textContent = "Adres firmy";
+
+          formaSelect.innerHTML = `<option value="Umowa B2B" selected>Umowa B2B</option>`;
+          formaSelect.value = "Umowa B2B";
+          toggleCzasPracy("Umowa B2B");
+          formaSelect.classList.add("readonly");
+
+        } else {
+          peselBlock.style.display = "block";
+          document.getElementById("pesel").setAttribute("required", "true");
+
+          companyBlock.style.display = "none";
+          document.getElementById("nazwaFirmy").removeAttribute("required");
+          document.getElementById("nip").removeAttribute("required");
+          document.getElementById("nazwaFirmy").value = "";
+          document.getElementById("nip").value = "";
+
+          adresLabel.textContent = "Adres zamieszkania";
+
+          formaSelect.innerHTML = `
             <option value="" disabled selected hidden>Wybierz</option>
-            <option>Biuro na Powązkowskiej</option>
-            <option>Centrum Spotkań lub Robotyki</option>
-          </select>
-        </label>
-      </div>`;
-  }
-}
+            <option>Umowa o pracę</option>
+            <option>Umowa zlecenie</option>
+            <option>Umowa o dzieło</option>
+            <option>Inne</option>
+          `;
+          
+          formaSelect.classList.remove("readonly");
+          formaSelect.value = "";
+          toggleCzasPracy("");
+         }
+      }
 
-function toggleCzasPracy(forma) {
-  const container = document.getElementById("czasPracyContainer");
-  container.innerHTML = "";
+      function toggleInne(selectId, inputId) {
+        const select = document.querySelector(`select[name="${selectId}"]`);
+        const inne = document.getElementById(inputId);
+        inne.style.display = select.value === "Inne" ? "block" : "none";
+      }
 
-  if (forma === "Umowa o pracę") {
-    container.innerHTML = `
-      <label>Część etatu*:
-        <select name="wymiar" required onchange="toggleInne('wymiar', 'etat_inny')">
-          <option value="" disabled selected hidden>Wybierz</option>
-          <option>1</option>
-          <option>3/4</option>
-          <option>1/2</option>
-          <option>1/4</option>
-          <option>Inne</option>
-        </select>
-      </label>
-      <div id="etat_inny" required class="wsuniecie" style="display:none;">
-        <label>Wpisz część etatu:
-          <input name="etat_inny_input">
-        </label>
-      </div>
-      <label>Wynagrodzenie miesięczne brutto (PLN)*:
-        <input type="number" name="wynagrodzenie" required>
-      </label>`;
-  } else if (forma === "Umowa B2B" || forma === "Umowa zlecenie") {
-    container.innerHTML = `
-      <label>Rodzaj rozliczenia*:
-        <select name="${forma === "Umowa B2B" ? "b2b_typ" : "zlecenie_typ"}" onchange="toggleRozliczenie('${forma}', this.value)">
-          <option value="" disabled selected hidden>Wybierz</option>
-          <option value="miesięczne">Miesięczne</option>
-          <option value="godzinowe">Godzinowe</option>
-          <option value="inne">Inne</option>
-        </select>
-      </label>
-      <div id="rozliczenieContainer"></div>`;
-    toggleRozliczenie(forma, "miesięczne");
-  } else if (forma === "Inne") {
-    container.innerHTML = `
-      <label>Opis warunków współpracy:<textarea name="inne_warunki_wspolpracy"></textarea></label>`;
-  }
-}
+      function toggleCzasTrwania(rodzaj) {
+        const doContainer = document.getElementById("czasDoContainer");
+        if (rodzaj === "Umowa na czas nieokreślony") {
+          doContainer.style.display = "none"
+          doContainer.querySelector("input").removeAttribute("required");
+        } else if (document.querySelector('select[name="forma"]').value === "Inne") {
+          doContainer.style.display = "block";
+          doContainer.querySelector("input").removeAttribute("required");
+        } else {
+          doContainer.style.display = "block";
+          doContainer.querySelector("input").setAttribute("required", "true");
+        }
+      }
 
-function toggleRozliczenie(forma, typ) {
-  const container = document.getElementById("rozliczenieContainer");
-  container.innerHTML = "";
+      function toggleMiejscePracy(model) {
+        const container = document.getElementById("miejscePracy");
+        container.innerHTML = "";
 
-  if (typ === "miesięczne") {
-    container.innerHTML = `
-      <label>Wynagrodzenie miesięczne brutto (PLN)*:<input type="number" name="wynagrodzenie" required></label>`;
-    if (forma === "Umowa zlecenie") {
-      container.innerHTML += `
-        <label>Liczba godzin miesięcznie*:<input type="number" name="godziny_miesiecznie" required></label>`;
-    }
-  } else if (typ === "godzinowe") {
-    container.innerHTML = `
-      <label>Stawka za godzinę (PLN)*:<input type="number" name="stawka_godzinowa" required></label>
-      <label>Liczba godzin miesięcznie*:<input type="number" name="godziny_miesieczne" required></label>`;
-  } else if (typ === "inne") {
-    container.innerHTML = `
-      <label>Opis warunków rozliczenia*:<textarea name="rozliczenie_inne" required></textarea></label>`;
-  }
-}
+        if (model === "Zdalny" || model === "Hybrydowy") {
+          container.innerHTML += `
+            <label class="wsuniecie">Adres domowy</label>
+              <label style="display: inline-flex; align-items:center; white-space: nowrap; margin: 5px 30px;">
+                <input type="checkbox" id="sameAsMainAddress" onchange="toggleDomowyCheckbox(this.checked)">
+                  Taki sam, jak w danych pracownika
+              </label>
 
-// === Obsługa kodów pocztowych i numeru telefonu ===
-document.addEventListener("input", function (e) {
-  if (e.target.id === "kodPocztowy" || e.target.id === "kodPocztowyDomowy") {
-    let val = e.target.value.replace(/\D/g, "").slice(0, 5);
-    if (val.length >= 3) val = val.slice(0, 2) + "-" + val.slice(2);
-    e.target.value = val;
-  }
+            <div id="domowyAddressBlock" class="adres-domowy-blok">
+              <label>Ulica*:<input name="adres_domowy_ulica" required></label>
+              <label>Nr domu / mieszkania*:<input name="adres_domowy_nr" required></label>
+              <label>Kod pocztowy*:<input name="adres_domowy_kod" id="kodPocztowyDomowy" required maxlength="6"></label>
+              <label>Miasto*:<input name="adres_domowy_miasto" required></label>
+            </div>`;
+        }
 
-  if (e.target.id === "telefon") {
-    let val = e.target.value.replace(/\D/g, "").slice(0, 9);
-    if (val.length > 3 && val.length <= 6) {
-      val = val.slice(0, 3) + " " + val.slice(3);
-    } else if (val.length > 6) {
-      val = val.slice(0, 3) + " " + val.slice(3, 6) + " " + val.slice(6);
-    }
-    e.target.value = val;
-  }
-});
+        if (model === "Stacjonarny" || model === "Hybrydowy") {
+          container.innerHTML += `
+            <div class="wsuniecie">
+              <label>Biuro firmowe*:
+                <select name="adres_biuro" required>
+                  <option value="" disabled selected hidden>Wybierz</option>
+                  <option>Biuro na Powązkowskiej</option>
+                  <option>Centrum Spotkań lub Robotyki</option>
+                </select>
+              </label>
+            </div>`;
+        }
+      }
 
-// === Potwierdzenie i wysyłka ===
-function confirmSubmission() {
-  const btn = event.target;
-  btn.disabled = true;
-  btn.innerText = "Tworzenie PDF...";
+      function toggleCzasPracy(forma) {
+        const container = document.getElementById("czasPracyContainer");
+        container.innerHTML = "";
 
-  const data = window._formDataToSend;
-  const summaryHTML = document.getElementById("summaryContent").innerHTML;
+        if (forma === "Umowa o pracę") {
+          container.innerHTML = `
+            <label>Część etatu*:
+              <select name="wymiar" required onchange="toggleInne('wymiar', 'etat_inny')">
+                <option value="" disabled selected hidden>Wybierz</option>
+                <option>1</option>
+                <option>3/4</option>
+                <option>1/2</option>
+                <option>1/4</option>
+                <option>Inne</option>
+              </select>
+            </label>
+            <div id="etat_inny" required class="wsuniecie" style="display:none;">
+              <label>Wpisz część etatu:
+                <input name="etat_inny_input">
+              </label>
+            </div>
+             <input type="hidden" name="rodzaj_rozliczenia" value="miesięczne">
+            <label>Wynagrodzenie miesięczne brutto (PLN)*:
+              <input type="number" name="wynagrodzenie" required>
+            </label>`;
+        } else if (forma === "Umowa B2B" || forma === "Umowa zlecenie") {
+          container.innerHTML = `
+            <label>Rodzaj rozliczenia*:
+              <select name="rodzaj_rozliczenia" onchange="toggleRozliczenie('${forma}', this.value)">
+                <option value="" disabled selected hidden>Wybierz</option>
+                <option value="miesięczne">Miesięczne</option>
+                <option value="godzinowe">Godzinowe</option>
+                <option value="inne">Inne</option>
+              </select>
+            </label>
+            <div id="rozliczenieContainer"></div>`;
+          toggleRozliczenie(forma, "miesięczne");
+        } else if (forma === "Umowa o dzieło" || forma === "Inne") {
+          container.innerHTML = `
+            <div class="row-flex">
+              <label>Opis warunków rozliczeń:
+              <textarea name="rozliczenie_inne"></textarea>
+              </label>
+            </div>`;
+        }
+      }
 
-  google.script.run.withSuccessHandler(function (response) {
-    const { url, blob, name } = response;
+      function toggleDomowyCheckbox(isSame) {
+        const block = document.getElementById("domowyAddressBlock");
 
-    const link = document.createElement("a");
-    link.href = "data:application/pdf;base64," + btoa(String.fromCharCode(...new Uint8Array(blob)));
-    link.download = name;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+        // Znajdź inputy domowe
+        const domowaUlica = document.querySelector('[name="adres_domowy_ulica"]');
+        const domowaNr    = document.querySelector('[name="adres_domowy_nr"]');
+        const domowaKod   = document.querySelector('[name="adres_domowy_kod"]');
+        const domowaMiasto= document.querySelector('[name="adres_domowy_miasto"]');
 
-    document.getElementById("summaryModal").style.display = "none";
-    document.getElementById("driveLink").href = url;
-    document.getElementById("successModal").style.display = "block";
-    closeSummary();
+        if (isSame) {
+          const mainStreet = document.querySelector('[name="adres_ulica"]').value;
+          const mainNr     = document.querySelector('[name="adres_nr"]').value;
+          const mainKod    = document.querySelector('[name="adres_kod"]').value;
+          const mainCity   = document.querySelector('[name="adres_miasto"]').value;
 
-    document.getElementById("hireForm").reset();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+          domowaUlica.value  = mainStreet;
+          domowaNr.value     = mainNr;
+          domowaKod.value    = mainKod;
+          domowaMiasto.value = mainCity;
 
+          domowaUlica.readOnly  = true;
+          domowaNr.readOnly  = true;
+          domowaKod.readOnly  = true;
+          domowaMiasto.readOnly  = true;
 
-    
-  }).submitForm(data);
-}
-function closeSuccessModal() {
-  document.getElementById("successModal").style.display = "none";
-}
+        } else {
+          domowaUlica.readOnly  = false;
+          domowaNr.readOnly     = false;
+          domowaKod.readOnly    = false;
+          domowaMiasto.readOnly = false;
 
-
-function showSummary() {
-
-  const form = document.getElementById("hireForm");
-  
-  if (!form.checkValidity()) {
-    form.reportValidity(); // wyświetli domyślne błędy
-    return;
-  }
-
-  const data = Object.fromEntries(new FormData(form).entries());
-  window._formDataToSend = data;
-
-  let summary = "";
-  function addItem(label, value) {
-    summary += `<div class="summary-item"><span class="summary-label">${label}:</span> <span class="summary-value">${value || "—"}</span></div>`;
-  }
-
-  summary += `<div class="summary-section">🧍 Dane pracownika</div>`;
-  addItem("Imię i nazwisko", data.imieNazwisko);
-  addItem("PESEL", data.pesel);
-  addItem("Adres", `${data.adres_ulica} ${data.adres_nr}, ${data.adres_kod} ${data.adres_miasto}`);
-  addItem("Telefon", data.telefon);
-
-  summary += `<div class="summary-section">📑 Szczegóły współpracy</div>`;
-  addItem("Stanowisko", data.stanowisko);
-  addItem("Dział", data.dzial + (data.dzial_inne_input ? ` (${data.dzial_inne_input})` : ""));
-  addItem("Zakres obowiązków", data.zakres);
-  addItem("Spółka zatrudniająca", data.spolka);
-  addItem("Data podpisania umowy", data.dataZatrudnienia);
-  addItem("Rodzaj umowy", data.rodzajUmowy);
-  addItem("Forma współpracy", data.forma + (data.inna_forma_wspolpracy ? ` (${data.inna_forma_wspolpracy})` : ""));
-  addItem("Od", data.od);
-  addItem("Do", data.do);
-  if (data.wymiar) addItem("Wymiar etatu", data.wymiar);
-  if (data.etat_inny_input) addItem("Wymiar etatu", data.etat_inny_input);
-  if (data.wynagrodzenie) addItem("Wynagrodzenie miesięczne", data.wynagrodzenie);
-  if (data.stawka_godzinowa) addItem("Stawka godzinowa", data.stawka_godzinowa);
-  if (data.godziny_miesiecznie) addItem("Liczba godzin miesięcznie", data.godziny_miesiecznie);
-  if (data.rozliczenie_inne) addItem("Sposób rozliczenia", data.rozliczenie_inne);
-  addItem("Premie", data.premie);
-
-  summary += `<div class="summary-section">🏢 Organizacja pracy</div>`;
-  addItem("Model miejsca pracy", data.model);
-  if (data.adres_biuro) addItem("Biuro", data.adres_biuro);
-  if (data.adres_domowy_ulica) {
-    addItem("Adres domowy", `${data.adres_domowy_ulica} ${data.adres_domowy_nr}, ${data.adres_domowy_kod} ${data.adres_domowy_miasto}`);
-  }
-  addItem("Przełożony", data.przelozony);
-  addItem("Opiekun", data.opiekun);
-  addItem("Uwagi", data.uwagi);
-
-  document.getElementById("summaryContent").innerHTML = summary;
-  document.getElementById("summaryModal").style.display = "block";
-}
+          domowaUlica.value  = "";
+          domowaNr.value     = "";
+          domowaKod.value    = "";
+          domowaMiasto.value = "";
+        }
+      }
 
 
+      function toggleRozliczenie(forma, typ) {
+        const container = document.getElementById("rozliczenieContainer");
+        container.innerHTML = "";
 
-function closeSummary() {
-  document.getElementById("summaryModal").style.display = "none";
-}
+        if (typ === "miesięczne") {
+          container.innerHTML = `
+            <label>Wynagrodzenie miesięczne (PLN brutto)*:<input type="number" name="wynagrodzenie" required></label>
+            <label>Liczba godzin miesięcznie:<input type="number" name="godziny_miesiecznie" optional></label>`;
+        } else if (typ === "godzinowe") {
+          container.innerHTML = `
+            <label>Stawka za godzinę (PLN brutto)*:<input type="number" name="stawka_godzinowa" required></label>
+            <label>Liczba godzin miesięcznie:<input type="number" name="godziny_miesiecznie" optional></label>`;
+        } else if (typ === "inne") {
+          container.innerHTML = `
+            <div class="row-flex">
+              <label>Opis warunków rozliczenia*:
+              <textarea name="rozliczenie_inne" required></textarea>
+              </label>
+            </div>`;
+        }
+      }
 
-// === Obsługa podsumowania ===
-document.getElementById("hireForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const pesel = document.getElementById("pesel").value;
-  if (!/^\d{11}$/.test(pesel)) {
-    alert("PESEL powinien mieć dokładnie 11 cyfr.");
-    return;
-  }
+      // === Obsługa kodów pocztowych i numeru telefonu ===
+      document.addEventListener("input", function (e) {
+        if (e.target.id === "kodPocztowy" || e.target.id === "kodPocztowyDomowy") {
+          let val = e.target.value.replace(/\D/g, "").slice(0, 5);
+          if (val.length >= 3) val = val.slice(0, 2) + "-" + val.slice(2);
+          e.target.value = val;
+        }
 
-  const form = this;
-  const data = Object.fromEntries(new FormData(form).entries());
-  window._formDataToSend = data;
+        if (e.target.id === "telefon") {
+          let val = e.target.value.replace(/\D/g, "").slice(0, 9);
+          if (val.length > 3 && val.length <= 6) {
+            val = val.slice(0, 3) + " " + val.slice(3);
+          } else if (val.length > 6) {
+            val = val.slice(0, 3) + " " + val.slice(3, 6) + " " + val.slice(6);
+          }
+          e.target.value = val;
+        }
+      });
 
-  let summary = "";
-  function addItem(label, value) {
-    summary += `<div class="summary-item"><span class="summary-label">${label}:</span> <span class="summary-value">${value || "—"}</span></div>`;
-  }
 
-  summary += `<div class="summary-section">🧍 Dane pracownika</div>`;
-  addItem("Imię i nazwisko", data.imieNazwisko);
-  addItem("PESEL", data.pesel);
-  addItem("Adres", `${data.adres_ulica} ${data.adres_nr}, ${data.adres_kod} ${data.adres_miasto}`);
-  addItem("Telefon", data.telefon);
+      // === Potwierdzenie i wysyłka ===
+      function confirmSubmission() {
+        const btn = event.target;
+        btn.disabled = true;
+        btn.innerText = "Tworzenie PDF...";
 
-  summary += `<div class="summary-section">📑 Szczegóły współpracy</div>`;
-  addItem("Stanowisko", data.stanowisko);
-  addItem("Dział", data.dzial + (data.dzial_inne_input ? ` (${data.dzial_inne_input})` : ""));
-  addItem("Zakres obowiązków", data.zakres);
-  addItem("Spółka zatrudniająca", data.spolka);
-  addItem("Data podpisania umowy", data.dataZatrudnienia);
-  addItem("Rodzaj umowy", data.rodzajUmowy);
-  addItem("Forma współpracy", data.forma + (data.inne_warunki_wspolpracy ? ` (${data.inne_warunki_wspolpracy})` : ""));
-  addItem("Od", data.od);
-  addItem("Do", data.do);
-  if (data.etat) addItem("Wymiar etatu", data.etat);
-  if (data.wymiar) addItem("Wymiar etatu", data.wymiar);
-  if (data.etat_inny_input) addItem("Wymiar etatu", data.etat_inny_input);
-  if (data.wynagrodzenie) addItem("Wynagrodzenie miesięczne", data.wynagrodzenie);
-  if (data.stawka_godzinowa) addItem("Stawka godzinowa", data.stawka_godzinowa);
-  if (data.godziny_miesiecznie) addItem("Liczba godzin miesięcznie", data.godziny_miesiecznie);
-  if (data.rozliczenie_inne) addItem("Sposób rozliczenia", data.rozliczenie_inne);
-  addItem("Premie", data.premie);
+        document.getElementById("summaryModal").style.display = "none";
+        document.getElementById("loadingModal").style.display = "flex";
 
-  summary += `<div class="summary-section">🏢 Organizacja pracy</div>`;
-  addItem("Model miejsca pracy", data.model);
-  if (data.adres_biuro) addItem("Biuro", data.adres_biuro);
-  if (data.adres_domowy_ulica) {
-    addItem("Adres domowy", `${data.adres_domowy_ulica} ${data.adres_domowy_nr}, ${data.adres_domowy_kod} ${data.adres_domowy_miasto}`);
-  }
-  addItem("Przełożony", data.przelozony);
-  addItem("Opiekun", data.opiekun);
-  addItem("Uwagi", data.uwagi);
+        const data = window._formDataToSend;
+        const summaryHTML = document.getElementById("summaryContent").innerHTML;
 
-  document.getElementById("summaryContent").innerHTML = summary;
-  document.getElementById("summaryModal").style.display = "block";
-});
-</script>
+        google.script.run.withSuccessHandler(function (response) {
+          const { url, blob, name } = response;
+
+          const link = document.createElement("a");
+          link.href = "data:application/pdf;base64," + btoa(String.fromCharCode(...new Uint8Array(blob)));
+          link.download = name;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          document.getElementById("loadingModal").style.display = "none";
+          document.getElementById("summaryModal").style.display = "none";
+          document.getElementById("driveLink").href = url;
+          document.getElementById("successModal").style.display = "block";
+          closeSummary();
+
+          document.getElementById("hireForm").reset();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+
+
+          
+        }).submitForm(data);
+      }
+
+      function closeSuccessModal() {
+        document.getElementById("successModal").style.display = "none";
+        document.getElementById("hireForm").reset(); // resetuj formularz
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // przewiń do góry
+      }
+
+
+      // === Podsumowania ===
+      function showSummary() {
+        const form = document.getElementById("hireForm");
+        const isCompany = document.getElementById("isCompany").checked;
+
+        if (!form.checkValidity()) {
+          form.classList.add("was-validated");
+          form.reportValidity();
+          return;
+        }
+        form.classList.remove("was-validated");
+
+        const data = Object.fromEntries(new FormData(form).entries());
+        window._formDataToSend = data;
+
+        let summary = "";
+        function addItem(label, value, multiline = false) {
+          const formattedValue = (value || "—").toString().replace(/\n/g, "<br>");
+          if (multiline) {
+            summary += `
+              <div class="summary-item">
+                <div class="summary-label" style="display:block; margin-bottom: 4px;">${label}:</div>
+                <div class="summary-value">${formattedValue}</div>
+              </div>`;
+          } else {
+            summary += `
+              <div class="summary-item">
+                <span class="summary-label">${label}:</span> 
+                <span class="summary-value">${formattedValue}</span>
+              </div>`;
+          }
+        }
+
+        summary += `<div class="summary-section">🧍 Dane pracownika</div>`;
+        addItem("Imię i nazwisko", data.imieNazwisko);
+        if (isCompany) {
+          addItem("Nazwa firmy", data.nazwaFirmy);
+          addItem("NIP", data.nip);
+        } else {
+          addItem("PESEL", data.pesel);
+        }
+        addItem("Adres", `${data.adres_ulica} ${data.adres_nr}, ${data.adres_kod} ${data.adres_miasto}`);
+        addItem("Telefon", data.telefon);
+
+        summary += `<div class="summary-section">📑 Szczegóły współpracy</div>`;
+        addItem("Stanowisko", data.stanowisko);
+        addItem("Dział", data.dzial + (data.dzial_inne_input ? ` (${data.dzial_inne_input})` : ""));
+        addItem("Zakres obowiązków", data.zakres, true);
+        addItem("Spółka zatrudniająca", data.spolka);
+        addItem("Data podpisania umowy", data.dataZatrudnienia);
+        addItem("Forma współpracy", data.forma);
+        if (data.inna_forma_wspolpracy) addItem("Opis formy współpracy", data.inna_forma_wspolpracy, true);
+        addItem("Rodzaj umowy", data.rodzajUmowy);
+        addItem("Od", data.od);
+        addItem("Do", data.do);
+        if (data.wymiar) addItem("Wymiar etatu", data.wymiar);
+        if (data.etat_inny_input) addItem("Wymiar etatu", data.etat_inny_input);
+        if (data.wynagrodzenie) addItem("Wynagrodzenie miesięczne", data.wynagrodzenie);
+        if (data.stawka_godzinowa) addItem("Stawka godzinowa", data.stawka_godzinowa);
+        if (data.godziny_miesiecznie) addItem("Liczba godzin miesięcznie", data.godziny_miesiecznie);
+        if (data.rozliczenie_inne) addItem("Sposób rozliczenia", data.rozliczenie_inne, true);
+        addItem("Premie", data.premie, true);
+
+        summary += `<div class="summary-section">🏢 Organizacja pracy</div>`;
+        addItem("Model miejsca pracy", data.model);
+        if (data.adres_biuro) addItem("Biuro", data.adres_biuro);
+        if (data.adres_domowy_ulica) {
+          addItem("Adres domowy", `${data.adres_domowy_ulica} ${data.adres_domowy_nr}, ${data.adres_domowy_kod} ${data.adres_domowy_miasto}`);
+        }
+        addItem("Przełożony", data.przelozony);
+        addItem("Opiekun", data.opiekun);
+        addItem("Uwagi", data.uwagi, true);
+
+        document.getElementById("summaryContent").innerHTML = summary;
+        document.getElementById("summaryModal").style.display = "block";
+      }
+
+
+      function closeSummary() {
+        document.getElementById("summaryModal").style.display = "none";
+      }
+   
+    </script>
+
   </body>
 </html>
   `;
@@ -662,21 +881,23 @@ function submitForm(data) {
   const sheet = SpreadsheetApp.openById("ID_GOOGLE_SPREADSHEET").getSheetByName("GOOGLE_SPREADSHEET_SHEET_NAME"); # PUT YOUR DATA HERE
   const folder = DriveApp.getFolderById(ID_GOOGLE_DRIVE"); # PUT YOUR DATA HERE
 
-  const adresZamieszkania = `${data.adres_ulica} ${data.adres_nr}, ${data.adres_kod} ${data.adres_miasto}`;
+  const isCompany = (data.isCompany === "on");
+  const adres = `${data.adres_ulica} ${data.adres_nr}, ${data.adres_kod} ${data.adres_miasto}`;
   const adresDomowy = data.adres_domowy_ulica ? `${data.adres_domowy_ulica} ${data.adres_domowy_nr}, ${data.adres_domowy_kod} ${data.adres_domowy_miasto}` : "-";
   const biuro = data.adres_biuro || "-";
-  const dzial = data.dzial || data.dzial_inne_input;
-  const forma = data.forma || data.inne_warunki_wspolpracy;
-  const wymiar = data.wymiar  ? `${data.wymiar} etatu` : data.etat_inny_input ? `${data.etat_inny_input} etatu`
-  : data.godziny_miesieczne  ? `${data.godziny_miesieczne} h`  : "-";
-  const rozliczenieTyp = data.b2b_typ || data.zlecenie_typ || data.inne_warunki_wspolpracy || "-";
+  const dzial = data.dzial_inne_input || data.dzial;
+  const forma = data.forma || data.inna_forma_wspolpracy;
+  const wymiar = data.etat_inny_input ? `${data.etat_inny_input} etatu` : data.wymiar  ? `${data.wymiar} etatu` : data.godziny_miesiecznie  ? `${data.godziny_miesiecznie} h`  : "-";
+  const rozliczenieTyp = data.rodzaj_rozliczenia || data.rozliczenie_inne || "-";
   const wynagrodzenie = data.wynagrodzenie ? data.wynagrodzenie : data.stawka_godzinowa ? `${data.stawka_godzinowa} zł/h` : data.rozliczenie_inne ? data.rozliczenie_inne : "-";
 
   sheet.appendRow([
     new Date(),
     data.imieNazwisko,
-    data.pesel,
-    adresZamieszkania,
+    data.pesel || "-",
+    data.nazwaFirmy || "-",
+    data.nip || "-",
+    adres,
     data.telefon,
     data.stanowisko,
     dzial,
@@ -686,7 +907,7 @@ function submitForm(data) {
     data.rodzajUmowy,
     forma,
     data.od,
-    data.do,
+    data.do || "-",
     wymiar,
     rozliczenieTyp,
     wynagrodzenie,
@@ -707,18 +928,27 @@ body.appendParagraph("Zgłoszenie nowego zatrudnienia").setHeading(DocumentApp.P
   const sekcje = [
     {
       title: "🧍 Dane pracownika",
-      dane: [
-        ["Imię i nazwisko", data.imieNazwisko],
-        ["PESEL", data.pesel],
-        ["Adres", adresZamieszkania],
-        ["Telefon", data.telefon]
-      ]
+      dane: (function() {
+        // Tworzymy tymczasową tablicę 'arr'
+        const arr = [
+          ["Imię i nazwisko", data.imieNazwisko]
+        ];
+        if (isCompany) {
+          arr.push(["Nazwa firmy", data.nazwaFirmy]);
+          arr.push(["NIP", data.nip]);
+        } else {
+          arr.push(["PESEL", data.pesel]);
+        }
+        arr.push(["Adres", adres]);
+        arr.push(["Telefon", data.telefon]);
+        return arr;
+      })()
     },
     {
       title: "📑 Szczegóły współpracy",
       dane: [
         ["Stanowisko", data.stanowisko],
-        ["Dział / Pion", dzial],
+        ["Dział", dzial],
         ["Zakres obowiązków", data.zakres || "-"],
         ["Spółka zatrudniająca", data.spolka],
         ["Data podpisania umowy", data.dataZatrudnienia],
@@ -726,7 +956,7 @@ body.appendParagraph("Zgłoszenie nowego zatrudnienia").setHeading(DocumentApp.P
         ["Forma współpracy", forma],
         ["Data rozpoczecia", data.od],
         ["Data zakończenia", data.do || "-"],
-        ["Wymiar czasu pracy", wymiar],
+        ["Wymiar czasu pracy", wymiar || "-"],
         ["Wynagrodzenie", wynagrodzenie],
         ["Premie/bonusy", data.premie || "-"]
       ]
@@ -748,7 +978,7 @@ sekcje.forEach(s => {
   body.appendParagraph(s.title)
     .setHeading(DocumentApp.ParagraphHeading.HEADING2)
     .setFontSize(12)
-    .setSpacingBefore(10)
+    .setSpacingBefore(4)
     .setSpacingAfter(2);
 
   const tableData = s.dane.map(([label, val]) => [label, val]);
