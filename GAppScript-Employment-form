@@ -10,7 +10,10 @@
  * ensuring that all required fields are completed and no critical information is missed.
  */
 
+
+#####################################################################################################
 # Kod.gs
+
 function doGet() {
   return HtmlService.createHtmlOutputFromFile("Index")
     .setTitle("Zgłoszenie zatrudnienia")
@@ -160,7 +163,9 @@ sekcje.forEach(s => {
 }
 
 
+#####################################################################################################
 # Index.html
+
 <!DOCTYPE html>
 <html>
   <head>
