@@ -2147,7 +2147,7 @@ for fig_key, fig in figures:
         obs, concl = description.split("<b>Conclusion:</b>", 1)
     
         obs_html = f'<p style="font-size:14px; line-height:1.6; color:#333; margin-bottom:18px;"><b>Observation:</b>{obs.strip().replace("<b>Observation:</b>", "")}</p>'
-        concl_html = f'<p style="font-size:14px; line-height:1.6; color:#333;"><b>Conclusion:</b>{concl.strip()}</p>'
+        concl_html = f'<p style="font-size:14px; line-height:1.6; color:#333;"><b>Conclusion: </b>{concl.strip()}</p>'
     else:
         # fallback – cały tekst jako jeden paragraf
         obs_html = f'<p style="font-size:14px; line-height:1.6; color:#333;">{description.strip()}</p>'
