@@ -1975,60 +1975,82 @@ fig11.show()
 # In[75]:
 
 
-import plotly.io as pio
+# ## 📊 Step 2.10 Analysis in place - summary 📌
 
-# 🧩 Lista wykresów 
-all_figures = [fig1, fig2, fig3, fig4, fig5, fig6, fig7, fig8, fig10, fig11]
+# ### 1. BGG Rank ⭐ vs. Year of Publication ⌛  
+# **Observation:** Most top-ranked games have been published after 2010, with very few older titles (pre-2000) present. 
+# However, looking at the 2010–2015 period, there's only a weak correlation between publication date and rank. 
+# The 2015–2020 range appears to be the most popular, likely due to the sheer volume of board games released in that time and the time it takes for a game to build reputation and get played.  
+# **Conclusion:** Modern board games dominate the BGG Top 100, but that might be because the market expanded significantly after 2010, giving newer titles more opportunity to shine and be discovered.
 
-# 🔗 Zamieniamy je na fragmenty HTML
-html_parts = []
-for i, fig in enumerate(all_figures):
-    html = pio.to_html(fig, full_html=False, include_plotlyjs=False)
-    html_parts.append(f"<h2>Wykres {i+1}</h2>\n{html}<hr>\n")
+# ---
 
-# 🧱 Składamy jeden wspólny HTML
-full_html = f"""
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>BGG Visualizations</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <style>
-        body {{ font-family: Arial, sans-serif; margin: 40px; }}
-        h2 {{ color: #333; }}
-        hr {{ margin: 40px 0; }}
-    </style>
-</head>
-<body>
-    <h1>📊 BGG Visualization Dashboard</h1>
-    {''.join(html_parts)}
-</body>
-</html>
-"""
+# ### 3. 🎨 Most Common (TOP15) Categories in TOP100 BGG Board Games  
+# **Top Categories:** "Economic", "Fantasy", "Science Fiction", "Fighting", and "Adventure" lead the list.  
+# **Conclusion:** Fantasy and science fiction categories offer immersive experiences and new worlds to explore — making them more likely to gain popularity among players.
 
-# 💾 Zapisz do pliku
-with open("BGG_all_charts.html", "w", encoding="utf-8") as f:
-    f.write(full_html)
+# ### 2. 🎲 Most Common (TOP15) Mechanics in TOP100 BGG Board Games  
+# **Top Mechanics:** "Solo/Solitaire Game", "Hand Management", "Variable Player Powers", "Variable Set-up", and "Open Drafting" are the most frequent.  
+# **Conclusion:** Mechanics requiring strategic resource management, dynamic game setup and player interaction are highly valued by the BGG community. 
+# Solo modes are also common among top games, reflecting the popularity of solo-friendly designs.
 
-print("✅ Wykresy zapisane do pliku BGG_all_charts.html!")
+# ---
+
+# ### 7. 🎲 Mechanics vs. 🚀 Number of Expansions  
+# **Observation:** The mechanics most associated with expansions include: "Scenario/Mission/Campaign Game", "Cooperative Game", "Solo/Solitaire Game", "Variable Player Powers", and "Dice Rolling".  
+# **Conclusion:** Scenario-based games lend themselves well to expansions aiming to increase replayability. 
+# Additionally, expansions often help introduce or refine new modes like solo or cooperative gameplay.
+
+# ### 6. 🧠 Complexity vs. 🚀 Number of Expansions in BGG Top 100  
+# **Observation:** No clear correlation (r = 0.09); games of varying complexity may have many or few expansions.  
+# **Conclusion:** Expansions are likely driven more by popularity and commercial success — often supported by a big or loyal fanbase — rather than game complexity alone.
+
+# ---
+
+# ### 5. 🧠 Complexity vs. 🕒 Playtime of BGG Top 100 Games  
+# **Observation:** A strong correlation exists (r = 0.66) — more complex games tend to have longer playtimes.  
+# **Conclusion:** Complexity often comes hand-in-hand with depth and extended gameplay.
+
+# ### 8. 🧠 Complexity vs. 👥 Number of Players  
+# **Observation:** No strong correlation. Most games are designed for 2–4 players regardless of complexity.  
+# **Conclusion:** Designers tend to stick to the optimal 2–4 player range, as it balances accessibility and strategic engagement.
+
+# ### 10. 👥 Avg. Number of Players vs. 📉 Popularity of BGG Top 100 Games  
+# **Observation:** No significant relationship between average number of players and BGG rank.  
+# **Conclusion:** Player count does not heavily influence a game’s popularity; other factors like mechanics, theme, and gameplay depth have a stronger impact.
+
+# ### 4. 🧠 Complexity vs. ⭐ Rating of BGG Top 100 Games  
+# **Observation:** There's a slight positive correlation (r = 0.34) between complexity and rating.  
+# **Conclusion:** BGG users tend to appreciate more complex games, as the community skews toward experienced and enthusiast players.
+
+# ### 9. 🧠 Complexity vs. 📉 Popularity of BGG Top 100  
+# **Observation:** There's a slight negative correlation (r = –0.31) — simpler games are more broadly popular.  
+# **Conclusion:** While complex games dominate the Top 100 in terms of ratings, simplicity allows certain titles to reach a wider audience. 
+# Simpler games tend to have clearer consensus on top picks, while complex games show more variation in rankings — possibly due to longer engagement times and appeal to more specialized audiences.
+
+# ---
+
+# ## 📌 Summary  
+# The BGG Top 100 is dominated by modern, strategic, and complex games.  
+
+# - **Complexity** is positively correlated with **longer playtime** and **higher user ratings**, but not necessarily with broader popularity — simpler games can reach a wider audience.  
+# - **Most popular mechanics** emphasize **decision-making**, **resource management**, and **asymmetrical play**.  
+# - In terms of **categories**, storytelling and world-building elements are key: **fantasy**, **science fiction**, and **adventure** rank highest.  
+# - **Expansions** are most frequent in games featuring **scenarios**, **solo modes**, and **cooperative mechanics**, supporting additional content and replayability.
 
 
+# In[ 76 ]:
 
-
-# In[ ]:
-
-
-pip install kaleido
-
-
-# In[ ]:
-
-
-import plotly.io as pio
+import os
 import base64
+#from weasyprint import HTML
 
-# 👇 Twoje figury – zamień na realne!
+# 📅 Folder z datą
+today_str = datetime.today().strftime("%Y-%m-%d")
+output_dir = today_str
+os.makedirs(output_dir, exist_ok=True)
+
+# 📊 Figury
 figures = [
     ("BGG_rank_vs_Year", fig1),
     ("Top15_Mechanics", fig2),
@@ -2042,45 +2064,127 @@ figures = [
     ("Players_vs_Popularity", fig11)
 ]
 
+# Definicje opisów dla każdej figury
+descriptions = {
+    "BGG_rank_vs_Year": {
+        "title": "BGG Rank ⭐ vs. Year of Publication ⌛",
+        "description": ("<b>Observation:</b> Most top-ranked games have been published after 2010, with very few older titles (pre-2000) present. "
+                        "However, during the 2010–2015 period, there's only a weak correlation between publication date and rank. "
+                        "The 2015–2020 range appears to be the most popular, likely due to the high volume of releases and time needed for a game to build reputation.<br/>"
+                        "<b>Conclusion:</b> Modern board games dominate the BGG Top 100, possibly because the market expanded significantly after 2010, giving newer titles more opportunity to shine.")
+    },
+    "Top15_Mechanics": {
+        "title": "🎲 Most Common (TOP15) Mechanics in TOP100 BGG Board Games",
+        "description": ("<b>Top Mechanics:</b> \"Solo/Solitaire Game\", \"Hand Management\", \"Variable Player Powers\", \"Variable Set-up\", and \"Open Drafting\" are the most frequent.<br/>"
+                        "<b>Conclusion:</b> Mechanics requiring strategic resource management, dynamic game setup, and player interaction are highly valued by the BGG community. "
+                        "Solo modes are also common among top games, reflecting the popularity of solo-friendly designs.")
+    },
+    "Top15_Categories": {
+        "title": "🎨 Most Common (TOP15) Categories in TOP100 BGG Board Games",
+        "description": ("<b>Top Categories:</b> \"Economic\", \"Fantasy\", \"Science Fiction\", \"Fighting\", and \"Adventure\" lead the list.<br/>"
+                        "<b>Conclusion:</b> Fantasy and science fiction categories offer immersive experiences and new worlds to explore, making them more likely to gain popularity among players.")
+    },
+    "Complexity_vs_Rating": {
+        "title": "Complexity 🧠 vs. Rating ⭐ of BGG Top 100 Games",
+        "description": ("<b>Observation:</b> There's a slight positive correlation (r = 0.34) between complexity and rating.<br/>"
+                        "<b>Conclusion:</b> BGG users tend to appreciate more complex games, as the community skews toward experienced and enthusiast players.")
+    },
+    "Complexity_vs_PlayingTime": {
+        "title": "Complexity 🧠 vs. Playtime 🕒 of BGG Top 100 Games",
+        "description": ("<b>Observation:</b> A strong correlation exists (r = 0.66) — more complex games tend to have longer playtimes.<br/>"
+                        "<b>Conclusion:</b> Complexity often comes hand-in-hand with depth and extended gameplay.")
+    },
+    "Complexity_vs_Expansions": {
+        "title": "Complexity 🧠 vs. Number of Expansions 🚀 of BGG Top 100 Games",
+        "description": ("<b>Observation:</b> No clear correlation exists (r = 0.09); games of varying complexity may have many or few expansions.<br/>"
+                        "<b>Conclusion:</b> Expansions appear to be driven more by popularity and commercial success—often supported by a strong or loyal fanbase—than by game complexity alone.")
+    },
+    "Mechanics_vs_Expansions": {
+        "title": "Mechanics 🎲 vs. Number of Expansions 🚀",
+        "description": ("<b>Observation:</b> The mechanics most associated with expansions include: \"Scenario/Mission/Campaign Game\", \"Cooperative Game\", "
+                        "\"Solo/Solitaire Game\", \"Variable Player Powers\", and \"Dice Rolling\".<br/>"
+                        "<b>Conclusion:</b> Scenario-based games are well-suited for expansions to boost replayability, and expansions may help introduce or refine new gameplay modes like solo or cooperative play.")
+    },
+    "Complexity_and_Players_vs_Popularity": {
+        "title": "Complexity 🧠 & Number of Players 👥 vs. Popularity 📉 ",
+        "description": ("<b>Observation:</b> The relationship between complexity, number of players, and popularity is not strongly defined, indicating that factors beyond these metrics influence game popularity.<br/>"
+                        "<b>Conclusion:</b> While game complexity and player count are important, other elements such as mechanics and theme also play a significant role in a game's success.")
+    },
+    "Complexity_vs_Popularity": {
+        "title": "Complexity 🧠 vs. Popularity 📉 of BGG Top 100 Games ",
+        "description": ("<b>Observation:</b> There's a slight negative correlation (r = –0.31) — simpler games tend to be more broadly popular.<br/>"
+                        "<b>Conclusion:</b> Although complex games dominate the Top 100 in ratings, simplicity helps some titles reach a wider audience. "
+                        "Simpler games often have a clearer consensus on top picks, whereas complex games display more ranking variation, possibly due to longer engagement times.")
+    },
+    "Players_vs_Popularity": {
+        "title": "Avg. Number of Players 👥 vs. Popularity 📉 of BGG Top 100 Games ",
+        "description": ("<b>Observation:</b> There is no significant relationship between the average number of players and a game's BGG rank.<br/>"
+                        "<b>Conclusion:</b> The number of players does not heavily influence a game's popularity; other factors such as mechanics, theme, and gameplay depth are more influential.")
+    }
+}
 
+# Budowanie części HTML z obrazami i opisami
 html_parts = []
 
-for title, fig in figures:
-    filename = f"{title.replace(' ', '_').lower()}.png"
+for fig_key, fig in figures:
+    # Przygotuj nazwę pliku
+    filename = f"{fig_key.replace(' ', '_').lower()}.png"
     path = f"{filename}"
-
-    # Eksport do PNG
+    
+    # Eksportuj obraz do PNG
     pio.write_image(fig, path, width=1200, height=800)
-
+    
     # Konwersja do base64
     with open(path, "rb") as f:
         encoded = base64.b64encode(f.read()).decode()
-
-    html_img = f"""
-    <h2>{title}</h2>
-    <img src="data:image/png;base64,{encoded}" width="100%" style="margin-bottom:40px;" />
-    <hr>
+    
+    # Pobierz tytuł i opis z definicji
+    title = descriptions.get(fig_key, {}).get("title", fig_key)
+    description = descriptions.get(fig_key, {}).get("description", "")
+    
+    html_block = f"""
+    <div style="max-width:900px; margin:40px auto;">
+        <h2 style="text-align:left; font-size:20px; color:#222; margin-bottom:12px;">{title}</h2>
+        <img src="data:image/png;base64,{encoded}" width="800px" style="display:block; margin-bottom:10px;" />
+        <p style="font-size:14px; line-height:1.6; color:#333;">
+            {description.replace('<b>', '<b style="display:inline-block; margin-bottom:6px;">')}
+        </p>
+    </div>
     """
-    html_parts.append(html_img)
 
-# 🔧 Składamy całość
+    html_parts.append(html_block)
+
+# Składa raport HTML
 final_html = f"""
 <html>
 <head>
     <meta charset="utf-8">
-    <title>BGG Visualizations (PNG Export)</title>
+    <title>BGG Visualizations Report</title>
     <style>
         body {{
             font-family: Arial, sans-serif;
             margin: 40px;
-            background-color: white;
+            background-color: #fff;
+            color: #333;
         }}
         h1 {{
             color: #111;
+            text-align: center;
         }}
         h2 {{
-            margin-top: 60px;
             color: #444;
+            margin-top: 60px;
+        }}
+        p {{
+            font-size: 14px;
+            line-height: 1.6;
+        }}
+        hr {{
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin-top: 40px;
+            margin-bottom: 40px;
         }}
         img {{
             border: 1px solid #ccc;
@@ -2095,14 +2199,33 @@ final_html = f"""
 </html>
 """
 
-# 💾 Zapisz gotowy raport
-with open("BGG_report_with_images.html", "w", encoding="utf-8") as f:
+# 💾 Zapisz HTML do pliku
+html_filename = os.path.join(output_dir, f"BGG_report_with_images_{today_str}.html")
+with open(html_filename, "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("✅ Wszystko gotowe! Plik zapisany jako: BGG_report_with_images.html")
+print(f"✅ HTML zapisany: {html_filename}")
+
+'''
+# 📄 ➡️ PDF – konwersja HTML do PDF przy użyciu WeasyPrint
+try:
+    from weasyprint import HTML
+
+    pdf_filename = os.path.join(output_dir, f"BGG_report_with_images_{today_str}.pdf")
+    HTML(html_filename).write_pdf(pdf_filename)
+
+    print(f"✅ PDF wygenerowany: {pdf_filename}")
+except Exception as e:
+    print("⚠️ PDF nie został wygenerowany (WeasyPrint).")
+    print(e)
+'''
 
 
-# In[ ]:
+
+
+
+
+
 
 
 
