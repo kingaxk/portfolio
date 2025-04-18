@@ -2142,15 +2142,27 @@ for fig_key, fig in figures:
     title = descriptions.get(fig_key, {}).get("title", fig_key)
     description = descriptions.get(fig_key, {}).get("description", "")
     
+    # Jeśli tekst zawiera zarówno Observation i Conclusion – rozbij na dwa paragrafy
+    if "<b>Conclusion:</b>" in description:
+        obs, concl = description.split("<b>Conclusion:</b>", 1)
+    
+        obs_html = f'<p style="font-size:14px; line-height:1.6; color:#333; margin-bottom:18px;"><b>Observation:</b>{obs.strip().replace("<b>Observation:</b>", "")}</p>'
+        concl_html = f'<p style="font-size:14px; line-height:1.6; color:#333;"><b>Conclusion:</b>{concl.strip()}</p>'
+    else:
+        # fallback – cały tekst jako jeden paragraf
+        obs_html = f'<p style="font-size:14px; line-height:1.6; color:#333;">{description.strip()}</p>'
+        concl_html = ""
+    
     html_block = f"""
     <div style="max-width:900px; margin:40px auto;">
         <h2 style="text-align:left; font-size:20px; color:#222; margin-bottom:12px;">{title}</h2>
         <img src="data:image/png;base64,{encoded}" width="800px" style="display:block; margin-bottom:10px;" />
-        <p style="font-size:14px; line-height:1.6; color:#333;">
-            {description.replace('<b>', '<b style="display:inline-block; margin-bottom:6px;">')}
-        </p>
+        {obs_html}
+        {concl_html}
     </div>
     """
+
+
 
     html_parts.append(html_block)
 
