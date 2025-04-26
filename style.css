@@ -1,0 +1,181 @@
+/* ============================= */
+/* 🎨 DESIGN SYSTEM VARIABLES   */
+/* ============================= */
+:root {
+  --color-primary: #001F2B;       /* NOWY Granatowy jako główny kolor tła */
+  --color-secondary: #C3E7F8;     /* Ice Blue – dla kontrastowych sekcji */
+  --color-deep: #000D12;          /* Jeszcze ciemniejszy granat – np. nav, stopka */
+  --color-gold: #D4AF37;          /* Champagne Gold – CTA, przyciski */
+  --color-light: #F9F9F9;         /* Tło sekcji z treścią lub kart */
+  --color-neutral: #E8E8E8;       /* UI */
+  --color-text: #F9F9F9;          /* Tekst jasny (na granacie) */
+}
+
+
+/* ============================= */
+/* ✍️ TYPOGRAPHY                */
+/* ============================= */
+body {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+  color: var(--color-primary);
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ============================= */
+/* 🔘 BUTTONS                   */
+/* ============================= */
+.btn {
+  background-color: var(--color-gold);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn--nav {
+  background-color: var(--color-gold);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.btn--nav:hover {
+  filter: brightness(1.1);
+}
+
+
+.btn--outline {
+  background-color: transparent;
+  color: var(--color-gold);
+  border: 2px solid var(--color-gold);
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+/* === PRIMARY BUTTON (dark background CTA) === */
+.btn--primary {
+  background-color: var(--color-deep);
+  color: var(--color-text);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn--primary:hover {
+  filter: brightness(1.2);
+}
+
+
+
+/* ============================= */
+/* WEB ELEMENTS                  */
+/* ============================= */
+.about-wrapper {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.profile-photo {
+  width: 200px;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.about-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+
+/* ============================= */
+/* 📐 LAYOUT – SECTIONS         */
+/* ============================= */
+section {
+  padding: 4rem 1rem;
+}
+
+section:nth-of-type(even) {
+  background-color: var(--color-secondary);
+}
+
+section:nth-of-type(odd) {
+  background-color: var(--color-light);
+}
+
+/* ============================= */
+/* 🔝 NAVIGATION                */
+/* ============================= */
+.navbar {
+  background-color: var(--color-primary);
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar ul {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar a {
+  color: var(--color-text);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+
+
+/* ============================= */
+/* 🔚 FOOTER                    */
+/* ============================= */
+footer {
+  background-color: var(--color-deep);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.875rem;
+}
