@@ -254,8 +254,166 @@
   </div>
 </section>
 
-<!-- JavaScript and remaining code unchanged -->
-<!-- (Intentionally not repeated here for brevity, as it wasn't modified) -->
+<script>
+  AOS.init();
+
+  // Pasek postępu
+  window.addEventListener('scroll', () => {
+    const scrollProgress = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    document.getElementById('progress-bar').style.width = `${scrollProgress}%`;
+  });
+
+  // Karuzela projektów
+  const track = document.querySelector('.carousel-track');
+  const slides = Array.from(track.children);
+  const prevBtn = document.querySelector('.carousel-btn.prev');
+  const nextBtn = document.querySelector('.carousel-btn.next');
+  let currentIndex = 0;
+
+  const dotsContainer = document.querySelector('.carousel-dots');
+
+  slides.forEach((_, index) => {
+    const dot = document.createElement('button');
+    dot.classList.add('carousel-dot');
+    if (index === 0) dot.classList.add('active');
+    dotsContainer.appendChild(dot);
+
+    dot.addEventListener('click', () => {
+      currentIndex = index;
+      updateCarousel();
+      updateDots();
+    });
+  });
+
+  function updateDots() {
+    const dots = document.querySelectorAll('.carousel-dot');
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[currentIndex].classList.add('active');
+  }
+
+  function updateCarousel() {
+  const activeSlide = slides[currentIndex];
+  const container = document.querySelector('.carousel-track-container');
+  
+  const containerCenter = container.offsetWidth / 2;
+  const slideCenter = activeSlide.offsetLeft + activeSlide.offsetWidth / 2;
+  
+  const scrollPosition = slideCenter - containerCenter;
+  
+  track.style.transform = `translateX(${-scrollPosition}px)`;
+  
+  slides.forEach(slide => slide.classList.remove('active'));
+  activeSlide.classList.add('active');
+
+  updateDots();
+}
+
+  prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    updateCarousel();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    updateCarousel();
+  });
+
+  window.addEventListener('load', updateCarousel);
+  window.addEventListener('resize', updateCarousel);
+
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
+
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    menuToggle.classList.toggle('open');
+  });
+
+  const links = document.querySelectorAll('.nav-links a');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+      menuToggle.classList.remove('open');
+    });
+  });
+
+  // Dynamiczny tekst z kursorem
+  const phrases = ["Kinga", "UX Researcher", "Information Architect", "Data Analyst"];
+let phraseIndex = 0;
+let letterIndex = 0;
+const dynamicContent = document.getElementById('dynamic-content');
+const cursor = document.getElementById('cursor');
+
+function typePhrase() {
+  if (letterIndex < phrases[phraseIndex].length) {
+    dynamicContent.textContent += phrases[phraseIndex][letterIndex];
+    letterIndex++;
+    setTimeout(typePhrase, 100);
+  } else {
+    // Po napisaniu całego słowa — ukryj kursor
+    cursor.style.opacity = '0';
+    setTimeout(() => {
+      cursor.style.opacity = '1'; // po pauzie przywróć kursor
+      erasePhrase();
+    }, 1500); // 1.5 sekundy pauzy
+  }
+}
+
+function erasePhrase() {
+  if (letterIndex > 0) {
+    dynamicContent.textContent = phrases[phraseIndex].substring(0, letterIndex - 1);
+    letterIndex--;
+    setTimeout(erasePhrase, 50);
+  } else {
+    phraseIndex = (phraseIndex + 1) % phrases.length;
+    setTimeout(typePhrase, 500); // 0.5 sekundy pauzy przed nowym słowem
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  dynamicContent.textContent = '';
+  cursor.textContent = '_';
+  typePhrase();
+});
+
+// Autoplay testimoniali
+document.addEventListener('DOMContentLoaded', () => {
+  const testimonialGrid = document.querySelector('.testimonial-grid');
+
+  // Zduplikuj wszystkie testimonial-card
+  testimonialGrid.innerHTML += testimonialGrid.innerHTML;
+
+  const section = document.getElementById('testimonials');
+
+  section.addEventListener('mouseenter', () => {
+    testimonialGrid.style.animationPlayState = 'paused';
+  });
+
+  section.addEventListener('mouseleave', () => {
+    testimonialGrid.style.animationPlayState = 'running';
+  });
+});
+
+
+  // Autoplay karuzeli
+  // AUTOPLAY dla karuzeli projektów
+let projectAutoPlay = setInterval(() => {
+  currentIndex = (currentIndex + 1) % slides.length;
+  updateCarousel();
+}, 3000); // co 3000 ms = 3 sekund
+
+// Zatrzymaj autoplay na hover (opcjonalnie, UX premium)
+const carouselWrapper = document.querySelector('.carousel-wrapper');
+carouselWrapper.addEventListener('mouseenter', () => clearInterval(projectAutoPlay));
+carouselWrapper.addEventListener('mouseleave', () => {
+  projectAutoPlay = setInterval(() => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    updateCarousel();
+  }, 5000);
+});
+
+</script>
+
 
 </body>
 </html>
