@@ -352,6 +352,7 @@ Kinga is truly passionate about optimization and has a deep understanding of use
 
   function setCarouselHeight() {
   const wrapper = document.querySelector('.carousel-wrapper');
+  const container = document.querySelector('.carousel-track-container');
   const slides = document.querySelectorAll('.carousel-slide');
 
   let maxHeight = 0;
@@ -361,6 +362,8 @@ Kinga is truly passionate about optimization and has a deep understanding of use
     const height = slide.offsetHeight;
     if (height > maxHeight) maxHeight = height;
   });  
+
+    const container = document.querySelector('.carousel-track-container');
     [wrapper, container].forEach(el => el.style.height = `${maxHeight}px`);
 }
   
@@ -384,7 +387,7 @@ function updateCarousel() {
   activeSlide.classList.add('active');
 
   updateDots();
-  setCarouselHeight(); // <- kluczowa linia
+  setCarouselHeight();
 }
 
   slides.forEach((_, index) => {
