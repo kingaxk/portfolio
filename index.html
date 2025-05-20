@@ -359,9 +359,8 @@ Kinga is truly passionate about optimization and has a deep understanding of use
     slide.style.height = 'auto'; // reset
     const height = slide.offsetHeight;
     if (height > maxHeight) maxHeight = height;
-  });
-container.style.height = `${maxHeight}px`;
-  wrapper.style.height = `${maxHeight}px`;
+  });  
+    [wrapper, container].forEach(el => el.style.height = `${maxHeight}px`);
 }
   
 
@@ -515,6 +514,11 @@ carouselWrapper.addEventListener('mouseleave', () => {
 });
 
 </script>
+
+  <noscript>
+  <p style="color:red;">Please enable JavaScript to view the interactive parts of this site.</p>
+</noscript>
+
 
 
 </body>
