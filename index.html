@@ -369,7 +369,7 @@ container.style.height = `${maxHeight}px`;
 window.addEventListener('load', setCarouselHeight);
 window.addEventListener('resize', setCarouselHeight);
 
-// Ustaw wysokość po zmianie slajdu
+    // Ustaw wysokość po zmianie slajdu
 function updateCarousel() {
   const activeSlide = slides[currentIndex];
   const container = document.querySelector('.carousel-track-container');
@@ -386,7 +386,6 @@ function updateCarousel() {
   updateDots();
   setCarouselHeight(); // <- kluczowa linia
 }
-
 
   slides.forEach((_, index) => {
     const dot = document.createElement('button');
@@ -409,22 +408,7 @@ function updateCarousel() {
     dots[currentIndex].classList.add('active');
   }
 
-  function updateCarousel() {
-  const activeSlide = slides[currentIndex];
-  const container = document.querySelector('.carousel-track-container');
-  
-  const containerCenter = container.offsetWidth / 2;
-  const slideCenter = activeSlide.offsetLeft + activeSlide.offsetWidth / 2;
-  
-  const scrollPosition = slideCenter - containerCenter;
-  
-  track.style.transform = `translateX(${-scrollPosition}px)`;
-  
-  slides.forEach(slide => slide.classList.remove('active'));
-  activeSlide.classList.add('active');
 
-  updateDots();
-}
 
   prevBtn.addEventListener('click', () => {
     currentIndex = (currentIndex - 1 + slides.length) % slides.length;
