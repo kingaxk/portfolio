@@ -748,7 +748,8 @@ input:focus, textarea:focus {
   position: relative;
   width: 100%;
   overflow: hidden;
-  margin-top: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
   transition: height 0.3s ease;
 }
 
