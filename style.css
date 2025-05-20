@@ -143,6 +143,12 @@ a:hover {
 
 
 /* === LAYOUT === */
+body, html {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+
 body {
   background: linear-gradient(-45deg, #1E4269, #2A5175, #3A628A, #4B749F);
   background-size: 400% 400%;
@@ -747,7 +753,7 @@ input:focus, textarea:focus {
 }
 
 .carousel-track-container {
-  overflow: visible;
+  overflow: hidden;
   position: relative;
 }
 
