@@ -741,8 +741,9 @@ input:focus, textarea:focus {
 .carousel-wrapper {
   position: relative;
   width: 100%;
-  overflow: visible;
+  overflow: hidden;
   margin-top: 1rem;
+  transition: height 0.3s ease;
 }
 
 .carousel-track-container {
