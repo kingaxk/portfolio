@@ -759,9 +759,9 @@ input:focus, textarea:focus {
 
 .carousel-track {
   display: flex;
-  gap: 4rem; 
+  gap: 2rem; 
   transition: transform 0.5s ease;
-  padding: 2rem 1rem;
+  padding: 0 1rem;
 }
 
 
