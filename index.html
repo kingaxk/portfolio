@@ -426,6 +426,12 @@ function updateCarousel() {
   window.addEventListener('load', updateCarousel);
   window.addEventListener('resize', updateCarousel);
 
+  document.addEventListener('DOMContentLoaded', () => {
+  updateCarousel();
+  setCarouselHeight();
+});
+
+
   const menuToggle = document.querySelector('.menu-toggle');
   const navLinks = document.querySelector('.nav-links');
 
