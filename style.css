@@ -754,7 +754,7 @@ input:focus, textarea:focus {
 }
 
 .carousel-track-container {
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 
