@@ -790,12 +790,15 @@ input:focus, textarea:focus {
   padding: 2rem;
 }
 
+
 .slide-image {
-  width: 50%;
-  height: auto;
-  border-radius: 10px;
-  object-fit: cover;
+  height: 200px;         
+  width: 100%;
+  object-fit: cover;     
+  border-radius: 8px; 
+  display: block;
 }
+
 
 .slide-text {
   width: 50%;
