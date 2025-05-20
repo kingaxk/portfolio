@@ -350,19 +350,20 @@ Kinga is truly passionate about optimization and has a deep understanding of use
   const dotsContainer = document.querySelector('.carousel-dots');
 
   function setCarouselHeight() {
-  const container = document.querySelector('.carousel-track-container');
+  const wrapper = document.querySelector('.carousel-wrapper');
   const slides = document.querySelectorAll('.carousel-slide');
 
   let maxHeight = 0;
 
   slides.forEach(slide => {
-    slide.style.height = 'auto'; // zresetuj, by móc zmierzyć
+    slide.style.height = 'auto'; // reset
     const height = slide.offsetHeight;
     if (height > maxHeight) maxHeight = height;
   });
-
-  container.style.height = `${maxHeight}px`;
+container.style.height = `${maxHeight}px`;
+  wrapper.style.height = `${maxHeight}px`;
 }
+  
 
 // Ustaw wysokość po załadowaniu i po zmianie rozmiaru
 window.addEventListener('load', setCarouselHeight);
