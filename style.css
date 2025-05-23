@@ -472,6 +472,10 @@ font-weight: 500;
   border-top: none;
 }
 
+  .service-table td:nth-child(2) {
+    font-weight: bold;
+  }
+
 
 
 
@@ -513,8 +517,8 @@ img {
 
 .flip-card {
   background: transparent;
-  width: 240px;
-  height: 240px;
+  width: 260px;
+  height: 260px;
   perspective: 1000px;
 }
 
@@ -583,10 +587,10 @@ img {
 }
 
 .flip-card-back p {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: rgba(245, 247, 250, 0.8);
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.5;
     max-width: 200px;
 }
 
@@ -754,7 +758,7 @@ input:focus, textarea:focus {
 }
 
 .carousel-track-container {
-  overflow: visible;
+  overflow: hidden;
   position: relative;
 }
 
@@ -836,6 +840,7 @@ input:focus, textarea:focus {
   border: none;
   cursor: pointer;
   transition: background 0.3s;
+  display: inline-block;
 }
 
 .carousel-dot.active {
