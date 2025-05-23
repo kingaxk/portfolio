@@ -1008,11 +1008,20 @@ h3 { font-size: 1.75rem; font-weight: 700; }
   max-width: 100%;
 }
 
+
+.hero-preview {
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+
+
 .flip-card {
-  width: 90vw; /* zamiast 100% lub sztywnej wartości */
+  width: 90vw;
   max-width: 100%;
-  height: 380px; /* więcej miejsca na treść */
-  margin: 1rem auto;
+  height: auto;
+  aspect-ratio: 1 / 1;
 }
 
 .flip-card-back h3,
