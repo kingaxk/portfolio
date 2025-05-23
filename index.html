@@ -606,6 +606,20 @@ slides.forEach((slide, index) => {
     }
   `;
   document.head.appendChild(testimonialStyle);
+
+
+let testimonialPaused = false;
+
+const testimonialGrid = document.querySelector('.testimonial-grid');
+const testimonialSection = document.getElementById('testimonials');
+
+testimonialSection.addEventListener('click', () => {
+  testimonialPaused = !testimonialPaused;
+  testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
+});
+
+
+
 </script>
 
 <noscript>
