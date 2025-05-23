@@ -897,6 +897,32 @@ input:focus, textarea:focus {
 
 
 
+  .slide-content {
+  padding: 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .slide-image {
+    aspect-ratio: 1280/900;
+width: 100%;
+  max-width: 350px;
+  height: auto;
+  max-height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+
+  .slide-text {
+    width: 100%;
+  text-align: left;
+  padding: 1rem 1rem;
+  }
+
+
+
 
 /* === ANIMACJE === */
 .fade-in {
@@ -975,6 +1001,28 @@ h3 { font-size: 1.75rem; font-weight: 700; }
     padding: 1rem 0 0.5rem;
   }
 
+
+.testimonial-card {
+  min-width: auto;
+  width: 90vw;
+  max-width: 100%;
+}
+
+
+.flip-card {
+  width: 100%;
+  max-width: 300px;
+  height: 320px;
+  margin: 0 auto;
+}
+
+.flip-card-back p,
+.flip-card-back h3 {
+  max-width: 90%; /* ograniczenie tekstu */
+}
+
+
+
 .card.card-wide {
     flex: 0 0 100%;
     max-width: 100%;
@@ -991,6 +1039,7 @@ h3 { font-size: 1.75rem; font-weight: 700; }
   }
 
   .slide-content {
+  padding: 1.5rem;
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -1009,7 +1058,8 @@ width: 100%;
 
   .slide-text {
     width: 100%;
-    margin-top: 1rem;
+  text-align: left;
+  padding: 1rem 1rem;
   }
 
 .carousel-slide h3,
