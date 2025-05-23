@@ -823,28 +823,6 @@ input:focus, textarea:focus {
   transform: scale(1.02);
 }
 
-.slide-content {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  padding: 2rem;
-}
-
-
-.slide-image {
-  height: 200px;         
-  width: 100%;
-  object-fit: contain;     
-  border-radius: 8px; 
-  display: block;
-}
-
-
-.slide-text {
-  width: 50%;
-  color: var(--color-dark);
-}
-
 .carousel-controls {
   display: flex;
   justify-content: center;
@@ -1020,9 +998,14 @@ h3 { font-size: 1.75rem; font-weight: 700; }
 
   .slide-image {
     aspect-ratio: 1280/900;
+width: 100%;
+  max-width: 500px;
+  height: auto;
+  max-height: 500px;
     object-fit: cover;
     border-radius: 10px;
   }
+
 
   .slide-text {
     width: 100%;
