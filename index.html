@@ -25,7 +25,7 @@
 </nav>
 
 <!-- Hero -->
-<header class="container hero fade-in text-center" id="hero" style="padding-top: 10rem;" data-aos="fade-up">
+<header class="container hero fade-in text-center" id="hero" data-aos="fade-up">
   <h1>Hi, I'm <span id="dynamic-text"><span id="dynamic-content"></span><span id="cursor">_</span></span></h1>
   <p>I design services and user experiences based on thorough research, structured information architecture as well as project documentation, and data analysis.</p>
 
@@ -393,9 +393,9 @@ Kinga is truly passionate about optimization and has a deep understanding of use
 
   const dotsContainer = document.querySelector('.carousel-dots');
 
-  function setCarouselHeight() {
+function setCarouselHeight() {
   const wrapper = document.querySelector('.carousel-wrapper');
-  const container = document.querySelector('.carousel-track-container');
+  const container = document.querySelector('.carousel-track-container'); 
   const slides = document.querySelectorAll('.carousel-slide');
 
   let maxHeight = 0;
@@ -404,12 +404,10 @@ Kinga is truly passionate about optimization and has a deep understanding of use
     slide.style.height = 'auto'; // reset
     const height = slide.offsetHeight;
     if (height > maxHeight) maxHeight = height;
-  });  
+  });
 
-    const container = document.querySelector('.carousel-track-container');
-    [wrapper, container].forEach(el => el.style.height = `${maxHeight}px`);
+  [wrapper, container].forEach(el => el.style.height = `${maxHeight}px`);
 }
-
   // Obsługa swipe 
   let startX;
   track.addEventListener('touchstart', e => {
@@ -428,11 +426,43 @@ Kinga is truly passionate about optimization and has a deep understanding of use
   });
   
 
-// Ustaw wysokość po załadowaniu i po zmianie rozmiaru
-window.addEventListener('load', setCarouselHeight);
-window.addEventListener('resize', setCarouselHeight);
+// Ustaw wysokość po załadowaniu wsyztskich slajdów karuzeli
+  function ensureAllImagesLoaded(callback) {
+  const images = document.querySelectorAll('.carousel-slide img');
+  let loadedCount = 0;
+  const totalImages = images.length;
 
-    // Ustaw wysokość po zmianie slajdu
+  if (totalImages === 0) {
+    callback();
+    return;
+  }
+
+  images.forEach(img => {
+    if (img.complete) {
+      loadedCount++;
+    } else {
+      img.addEventListener('load', () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          callback();
+        }
+      });
+      img.addEventListener('error', () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          callback();
+        }
+      });
+    }
+  });
+
+  if (loadedCount === totalImages) {
+    callback();
+  }
+}
+
+
+    // Update zmianie slajdu
 function updateCarousel() {
   const activeSlide = slides[currentIndex];
   const container = document.querySelector('.carousel-track-container');
@@ -483,8 +513,6 @@ function updateCarousel() {
     updateCarousel();
   });
 
-  window.addEventListener('load', updateCarousel);
-  window.addEventListener('resize', updateCarousel);
 
  document.addEventListener('DOMContentLoaded', () => {
 
@@ -492,8 +520,11 @@ function updateCarousel() {
   cursor.textContent = '_';
   typePhrase();
    
-   updateCarousel();
-  setCarouselHeight();
+ ensureAllImagesLoaded(() => {
+    setCarouselHeight();
+    updateCarousel(); // Upewnij się, że karuzela jest aktualizowana po ustawieniu wysokości
+  });
+});
   
    
   const testimonialGrid = document.querySelector('.testimonial-grid');
