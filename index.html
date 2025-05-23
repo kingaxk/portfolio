@@ -519,6 +519,16 @@ function erasePhrase() {
       updateDots();
     });
   });
+
+slides.forEach((slide, index) => {
+  slide.addEventListener('click', () => {
+    if (index !== currentIndex) {
+      currentIndex = index;
+      updateCarousel();
+    }
+  });
+});
+
   
   function updateDots() {
     const dots = document.querySelectorAll('.carousel-dot');
