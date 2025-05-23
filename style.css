@@ -1002,16 +1002,18 @@ h3 { font-size: 1.75rem; font-weight: 700; }
 
 
 .hero-preview {
-  flex-direction: column;
-  gap: 2rem;
-  align-items: center;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(-5vw);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
 }
 
-  .flip-card {
-    flex: 0 0 90%;
-    max-width: 90%;
+.flip-card {
+  width: 100%;
+  max-width: 100%
     margin: 0 auto;
-    
   height: auto;
   min-height: 260px; 
   }
