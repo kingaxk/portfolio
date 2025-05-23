@@ -999,9 +999,9 @@ h3 { font-size: 1.75rem; font-weight: 700; }
   .slide-image {
     aspect-ratio: 1280/900;
 width: 100%;
-  max-width: 500px;
+  max-width: 350px;
   height: auto;
-  max-height: 500px;
+  max-height: 350px;
     object-fit: cover;
     border-radius: 10px;
   }
