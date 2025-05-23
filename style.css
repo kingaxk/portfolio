@@ -775,6 +775,10 @@ input:focus, textarea:focus {
 }
 
 /* === CAROUSEL === */
+#projects h2 {
+  margin-bottom: 0;
+}
+
 .carousel-wrapper {
   position: relative;
   width: 100%;
