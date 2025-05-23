@@ -157,6 +157,7 @@ body {
   font-size: var(--font-size-base);
   color: var(--color-light);
   line-height: 1.8;
+  padding-top: 80px;
 }
 
 @keyframes gradientBG {
@@ -513,8 +514,8 @@ img {
 
 .flip-card {
   background: transparent;
-  width: 240px;
-  height: 240px;
+  width: 260px;
+  height: 260px;
   perspective: 1000px;
 }
 
@@ -572,6 +573,8 @@ img {
 .flip-card-back {
   transform: rotateY(180deg);
   padding: 1rem;
+   background: white;
+  color: var(--color-dark);
 }
 
 .flip-card-back h3 {
@@ -749,7 +752,7 @@ input:focus, textarea:focus {
   width: 100%;
   overflow: visible;
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 8rem;
   transition: height 0.3s ease;
 }
 
@@ -959,7 +962,7 @@ input:focus, textarea:focus {
 
 h1 { font-size: 3rem; }
 h2 { font-size: 2.2rem; }
-h3 { font-size: 1.75rem; }
+h3 { font-size: 1.75rem; font-weight: 700; }
 
 
   section {
