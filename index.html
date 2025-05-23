@@ -17,7 +17,7 @@
   <button class="menu-toggle" aria-label="Open menu">☰</button>
   <div class="nav-links">
     <a href="#projects" class="button--tertiary">Projects</a>
-    <a href="#about" class="button--tertiary">About me</a>
+   <!-- <a href="#about" class="button--tertiary">About me</a> -->
     <a href="#services" class="button--tertiary">Offer</a>
     <a href="#consultation" class="button">Consultation</a>
   </div>
@@ -37,7 +37,6 @@
         </div>
         <div class="flip-card-back">
           <h3>UX Research</h3>
-          <div class="section-divider"></div>
           <p>Understanding user emotions and behaviors through interviews, workshops and usability testing.</p>
         </div>
       </div>
@@ -50,7 +49,6 @@
         </div>
         <div class="flip-card-back">
           <h3>Information Architecture</h3>
-          <div class="section-divider"></div>
           <p>Structuring content into logical, intuitive systems that enhance user understanding and navigation.</p>
         </div>
       </div>
@@ -63,7 +61,6 @@
         </div>
         <div class="flip-card-back">
           <h3>Data Analytics</h3>
-          <div class="section-divider"></div>
           <p>Analyzing data patterns, exploring trends and user behaviors to support data-driven decision-making.</p>
         </div>
       </div>
@@ -77,7 +74,7 @@
 <section id="testimonials" class="section-dark fade-in" data-aos="fade-up">
   <div class="section-divider"></div>
   <div class="container">
-    <h2>What others say</h2>
+    <!-- <h2>What others say</h2>  -->
     <div class="testimonial-grid">
       <div class="testimonial-card">
         <p>"Kinga was my guide, sharing her vast knowledge and helping me run user tests. Her dedication and empathetic approach made working with her an absolute pleasure.<br>Kinga is truly passionate about optimization and has a deep understanding of user behavior."</p>
@@ -99,10 +96,10 @@
 
   
 <!-- Projects -->
-<section id="projects" class="section-dark fade-in" data-aos="fade-up">
-  <div class="section-divider"></div>
+<section id="projects" class="fade-in" data-aos="fade-up">
   <div class="container">
-    <h2>Projects</h2>
+   <!-- <h2>Projects</h2> -->
+<h2 class="text-center">Look at what I’ve done</h2>
   </div>
   
     <div class="carousel-wrapper">
@@ -252,14 +249,15 @@
       </div>
     </div>
   </div>
-  <div class="section-divider"></div>
 </section>
 
 
 <!-- About me -->
-<section id="about" class="fade-in" data-aos="fade-up">
+<section id="about" class="section-dark fade-in" data-aos="fade-up">
+  <div class="section-divider"></div>
   <div class="container">
-    <h2>More about me</h2>
+
+    <!-- <h2>More about me</h2>  -->
     <div class="about-me">
       <img src="images/kinga-kornacka-photo.png" alt="Your photo" class="about-photo">
       <div class="chat-bubble">
@@ -267,21 +265,27 @@
         <p>My background in Business Psychology and Human-Computer Interaction helps me bridge the gap between user needs and business goals - with data always leading the way.</p>
       </div>
     </div>
+
   </div>
+  <div class="section-divider"></div>
 </section>
 
 
 <!-- Offer -->
 <section id="services" class="fade-in" data-aos="fade-up">
   <div class="container">
-    <h2>Services</h2>
+   <!-- <h2>Services</h2> -->
+<h2 class="text-center">What can I do for you?</h2>
+
     <div class="oferta-grid">
 
       <!-- UX Research -->
       <div class="card card-wide">
         <div class="card-content">
-          <img src="images/icon-ux-research.png" alt="UX Research" style="width: 70px; margin-bottom: 1rem;">
-          <h3>Service Design / UX Research</h3>
+          <div class="card-title-wrapper">
+            <img src="images/icon-ux-research.png" alt="UX Research" style="width: 50px;">
+            <h3>Service Design / UX Research</h3>
+          </div>
           <p>Helping your product meet real user needs through research planning with proper methodologies, customer journey mapping, and user testing. Gain actionable insights to optimize the UX and drive product success.</p>
           <p><span style="color: gray;">Deliverables:</span> <strong>User testing and interviews reports, highlighted pain points and success areas, UX improvement recommendations</strong></p>
           <p><span style="color: gray;">Outcomes:</span> <strong>Enhanced usability, reduced design risk, increased conversions through smoother user flows</strong></p>
@@ -291,8 +295,10 @@
       <!-- Data Analysis -->
       <div class="card card-wide">
         <div class="card-content">
-          <img src="images/icon-data-analysis.png" alt="Data Analysis" style="width: 70px; margin-bottom: 1rem;">
-          <h3>Data Analysis</h3>
+          <div class="card-title-wrapper">
+            <img src="images/icon-data-analysis.png" alt="Data Analysis" style="width: 50px;">
+            <h3>Data Analysis</h3>
+          </div>
           <p>Transforming raw data into clear dashboards and strategic insights. Discover hidden patterns to empower smarter and faster decision-making.</p>
           <p><span style="color: gray;">Deliverables:</span> <strong>Dashboards, analytical reports with data visualizations and verified hypotheses</strong></p>
           <p><span style="color: gray;">Outcomes:</span> <strong>Clear and actionable insights to reduce risk and strengthen arguments with facts – not opinions</strong></p>
@@ -302,8 +308,10 @@
       <!-- Predictive Analytics -->
       <div class="card card-wide">
         <div class="card-content">
-          <img src="images/icon-predictive-analytics.png" alt="Predictive Analytics" style="width: 70px; margin-bottom: 1rem;">
-          <h3>Predictive Analytics</h3>
+          <div class="card-title-wrapper">
+            <img src="images/icon-predictive-analytics.png" alt="Predictive Analytics" style="width: 50px;">
+            <h3>Predictive Analytics</h3>
+          </div>
           <p>Building predictive models to forecast behaviors, optimize customer journeys, and support strategic decisions. From discovery to model deployment and evaluation.</p>
           <p><span style="color: gray;">Deliverables:</span> <strong>Predictive models with proper documentation and guidance for effective use</strong></p>
           <p><span style="color: gray;">Outcomes:</span> <strong>Improved forecasting (e.g. growth, churn) for better preparedness and more confident strategic decisions based on future trends</strong></p>
@@ -313,13 +321,16 @@
       <!-- Automation -->
       <div class="card card-wide">
         <div class="card-content">
-          <img src="images/icon-automation.png" alt="Automation" style="width: 70px; margin-bottom: 1rem;">
-          <h3>Automation</h3>
+          <div class="card-title-wrapper">
+            <img src="images/icon-automation.png" alt="Automation" style="width: 50px;">
+            <h3>Automation</h3>
+          </div>
           <p>Designing Python scripts, automating workflows, and optimizing manual processes. Delivering faster operations and enhanced efficiency through tailored automation solutions.</p>
           <p><span style="color: gray;">Deliverables:</span> <strong>Python scripts, dynamic forms and other simple apps, custom automation workflows</strong></p>
           <p><span style="color: gray;">Outcomes:</span> <strong>Reduced manual effort and costs, streamlined operations and error prevention</strong></p>
         </div>
       </div>
+
 
 
     </div>
