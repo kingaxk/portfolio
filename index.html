@@ -486,9 +486,17 @@ function updateCarousel() {
   window.addEventListener('load', updateCarousel);
   window.addEventListener('resize', updateCarousel);
 
-  document.addEventListener('DOMContentLoaded', () => {
-  updateCarousel();
+ document.addEventListener('DOMContentLoaded', () => {
+
+   dynamicContent.textContent = '';
+  cursor.textContent = '_';
+  typePhrase();
+   
+   updateCarousel();
   setCarouselHeight();
+  
+   
+  const testimonialGrid = document.querySelector('.testimonial-grid');
 });
 
 
@@ -541,15 +549,7 @@ function erasePhrase() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  dynamicContent.textContent = '';
-  cursor.textContent = '_';
-  typePhrase();
-});
-
 // Autoplay testimoniali
-document.addEventListener('DOMContentLoaded', () => {
-  const testimonialGrid = document.querySelector('.testimonial-grid');
 
   // Zduplikuj wszystkie testimonial-card
   testimonialGrid.innerHTML += testimonialGrid.innerHTML;
