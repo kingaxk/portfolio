@@ -278,6 +278,7 @@ body {
   background-size: cover;
   position: relative;
   overflow: hidden;
+  padding-top: 10rem;
 }
 
 .hero-preview {
