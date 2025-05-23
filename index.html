@@ -409,6 +409,23 @@ Kinga is truly passionate about optimization and has a deep understanding of use
     const container = document.querySelector('.carousel-track-container');
     [wrapper, container].forEach(el => el.style.height = `${maxHeight}px`);
 }
+
+  // Obsługa swipe 
+  let startX;
+  track.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+  });
+  track.addEventListener('touchend', e => {
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = endX - startX;
+    if (deltaX > 50) {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      updateCarousel();
+    } else if (deltaX < -50) {
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateCarousel();
+    }
+  });
   
 
 // Ustaw wysokość po załadowaniu i po zmianie rozmiaru
@@ -548,6 +565,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+  //  Zapętlające się testimoniale
+  const testimonialStyle = document.createElement('style');
+  testimonialStyle.innerHTML = `
+    @keyframes scrollTestimonials {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .testimonial-grid {
+      animation: scrollTestimonials 60s linear infinite;
+    }
+  `;
+  document.head.appendChild(testimonialStyle);
+  
 
   // Autoplay karuzeli
   // AUTOPLAY dla karuzeli projektów
