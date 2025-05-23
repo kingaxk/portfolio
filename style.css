@@ -43,8 +43,7 @@ h2 {
 h3 {
   font-size: 1.125rem;
   margin-bottom: 1.5rem;
-  line-height: 1.25;
-  font-weight: 700;
+  line-height: 1.35;
 }
 
 p {
@@ -294,9 +293,7 @@ input:focus, textarea:focus {
 
 .slide-image {
   width: 100%;
-  height: auto;
-  max-width: 300px;
-  max-height: 300px;
+  height: 200px;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -432,8 +429,8 @@ input:focus, textarea:focus {
 }
 
 .flip-card-back {
-  background: #ffffff;
-  color: var(--color-dark);
+  background: rgba(255,255,255,0.08);
+  color: var(--color-light);
   transform: rotateY(180deg);
 }
 
@@ -519,4 +516,3 @@ input:focus, textarea:focus {
   background: rgba(255, 255, 255, 0.1);
   transform: rotate(45deg);
 }
-
