@@ -1007,14 +1007,15 @@ h3 { font-size: 1.75rem; font-weight: 700; }
   align-items: center;
 }
 
-
-
-.flip-card {
-  width: 90vw;
-  max-width: 100%;
+  .flip-card {
+    flex: 0 0 90%;
+    max-width: 90%;
+    margin: 0 auto;
+    
   height: auto;
   min-height: 260px; 
-}
+  }
+
 
   .flip-card-inner,
 .flip-card-front,
