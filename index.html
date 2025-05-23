@@ -356,31 +356,78 @@
   const phrases = ["Kinga", "UX Researcher", "Information Architect", "Data Analyst"];
   let phraseIndex = 0;
   let letterIndex = 0;
+
+
+
+let isHeroVisible = true;
+let typingPaused = false;
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry => {
+      isHeroVisible = entry.isIntersecting;
+    });
+  },
+  { threshold: 0.1 }
+);
+
+observer.observe(document.getElementById('hero'));
+
+setInterval(() => {
+  if (isHeroVisible && typingPaused) {
+    typingPaused = false;
+    if (letterIndex === 0) {
+      typePhrase();
+    } else if (letterIndex < phrases[phraseIndex].length) {
+      typePhrase();
+    } else {
+      erasePhrase();
+    }
+  }
+}, 1000);
+
+
   
   function typePhrase() {
-    if (letterIndex < phrases[phraseIndex].length) {
-      dynamicContent.textContent += phrases[phraseIndex][letterIndex];
-      letterIndex++;
-      setTimeout(typePhrase, 100);
-    } else {
-      cursor.style.opacity = '0';
-      setTimeout(() => {
-        cursor.style.opacity = '1';
-        erasePhrase();
-      }, 1500);
-    }
+  if (!isHeroVisible) {
+    typingPaused = true;
+    return;
   }
-  
-  function erasePhrase() {
-    if (letterIndex > 0) {
-      dynamicContent.textContent = phrases[phraseIndex].substring(0, letterIndex - 1);
-      letterIndex--;
-      setTimeout(erasePhrase, 50);
-    } else {
-      phraseIndex = (phraseIndex + 1) % phrases.length;
-      setTimeout(typePhrase, 500);
-    }
+
+  typingPaused = false;
+
+  if (letterIndex < phrases[phraseIndex].length) {
+    dynamicContent.textContent += phrases[phraseIndex][letterIndex];
+    letterIndex++;
+    setTimeout(typePhrase, 100);
+  } else {
+    cursor.style.opacity = '0';
+    setTimeout(() => {
+      cursor.style.opacity = '1';
+      erasePhrase();
+    }, 1500);
   }
+}
+
+function erasePhrase() {
+  if (!isHeroVisible) {
+    typingPaused = true;
+    return;
+  }
+
+  typingPaused = false;
+
+  if (letterIndex > 0) {
+    dynamicContent.textContent = phrases[phraseIndex].substring(0, letterIndex - 1);
+    letterIndex--;
+    setTimeout(erasePhrase, 50);
+  } else {
+    phraseIndex = (phraseIndex + 1) % phrases.length;
+    setTimeout(typePhrase, 500);
+  }
+}
+
+
   
   // Scroll progress
   window.addEventListener('scroll', () => {
