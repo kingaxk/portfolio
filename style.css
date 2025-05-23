@@ -1028,8 +1028,8 @@ h3 { font-size: 1.75rem; font-weight: 700; }
 .flip-card-back p {
   max-width: 95%;
 padding: 1.5rem;
+  margin-bottom: 0.5rem;
 }
-
 
 
 
