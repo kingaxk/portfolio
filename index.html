@@ -561,18 +561,51 @@ slides.forEach((slide, index) => {
   });
   
   // Autoplay carousel
-  let projectAutoPlay = setInterval(() => {
-    currentIndex = (currentIndex + 1) % slides.length;
-    updateCarousel();
-  }, 3000);
+  let userInteractedWithCarousel = false;
+  let projectAutoPlay;
+
+  function pauseAutoplay() {
+    clearInterval(projectAutoPlay);
+    projectAutoPlay = null;
+  }
   
-  carouselWrapper.addEventListener('mouseenter', () => clearInterval(projectAutoPlay));
-  carouselWrapper.addEventListener('mouseleave', () => {
-    projectAutoPlay = setInterval(() => {
-      currentIndex = (currentIndex + 1) % slides.length;
-      updateCarousel();
-    }, 5000);
-  });
+
+  carouselWrapper.addEventListener('touchstart', () => {
+  userInteractedWithCarousel = true;
+  pauseAutoplay();
+});
+
+carouselWrapper.addEventListener('mousedown', () => {
+  userInteractedWithCarousel = true;
+  pauseAutoplay();
+});
+
+  carouselWrapper.addEventListener('touchstart', () => {
+  userInteractedWithCarousel = true;
+  pauseAutoplay();
+});
+
+carouselWrapper.addEventListener('mousedown', () => {
+  userInteractedWithCarousel = true;
+  pauseAutoplay();
+});
+
+  const carouselObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !projectAutoPlay && !userInteractedWithCarousel) {
+        projectAutoPlay = setInterval(() => {
+          currentIndex = (currentIndex + 1) % slides.length;
+          updateCarousel();
+        }, 3000);
+      }
+    });
+  },
+  { threshold: 0.25 }
+);
+
+carouselObserver.observe(carouselWrapper);
+
   
   // Mobile menu
   const menuToggle = document.querySelector('.menu-toggle');
@@ -588,7 +621,8 @@ slides.forEach((slide, index) => {
       menuToggle.classList.remove('open');
     });
   });
-  
+
+  // Global function
   document.addEventListener('DOMContentLoaded', () => {
     dynamicContent.textContent = '';
     cursor.textContent = '_';
@@ -597,7 +631,8 @@ slides.forEach((slide, index) => {
       setCarouselHeight();
       updateCarousel();
     });
-  
+    
+  // Testimonials
     const testimonialGrid = document.querySelector('.testimonial-grid');
     testimonialGrid.innerHTML += testimonialGrid.innerHTML;
     const section = document.getElementById('testimonials');
