@@ -714,7 +714,9 @@ document.addEventListener('DOMContentLoaded', () => {
     testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
   });
 
-// Deadclick tooltip — tylko dla kliknięcia w AKTYWNY slajd lub kafelki oferty
+// Ustaw pierwszy slajd jako aktywny na starcie
+slides[currentIndex].classList.add('active');
+
 // Deadclick tooltip — tylko dla kliknięcia w AKTYWNY slajd lub kafelki oferty
 const tooltip = document.getElementById('deadclick-tooltip');
 const overlay = document.getElementById('deadclick-overlay');
@@ -784,6 +786,7 @@ overlay.addEventListener('click', (e) => {
   
 </body>
 </html>
+
 
 
 
