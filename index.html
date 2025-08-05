@@ -721,7 +721,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.body.addEventListener('click', (e) => {
     const activeSlide = document.querySelector('.carousel-slide.active');
-    const isCentralSlide = activeSlide && activeSlide.contains(e.target);
+    const isCentralSlide = activeSlide && e.target.closest('.carousel-slide') === activeSlide;
     const isOfferCard = e.target.closest('.oferta-grid .card');
 
     // Pokaż tooltip tylko dla centralnego slajdu i kafelków oferty
@@ -771,6 +771,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
 </body>
 </html>
+
 
 
 
