@@ -573,6 +573,7 @@ function erasePhrase() {
   }
   
   function updateCarousel() {
+    slides = Array.from(track.children);
     const activeSlide = slides[currentIndex];
     const container = document.querySelector('.carousel-track-container');
     const containerCenter = container.offsetWidth / 2;
@@ -728,7 +729,7 @@ document.body.addEventListener('click', (e) => {
   const isOfferCard = e.target.closest('.oferta-grid .card');
 
   if (clickedSlide) {
-    const clickedIndex = slides.indexOf(clickedSlide);
+    const clickedIndex = Array.from(slides).indexOf(clickedSlide);
 
     if (clickedIndex !== currentIndex) {
       // Klik w NIEAKTYWNY slajd → tylko przesunięcie
@@ -784,6 +785,7 @@ overlay.addEventListener('click', (e) => {
   
 </body>
 </html>
+
 
 
 
