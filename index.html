@@ -718,26 +718,27 @@ document.addEventListener('DOMContentLoaded', () => {
 slides[currentIndex].classList.add('active');
 
 // Deadclick tooltip — tylko dla kliknięcia w AKTYWNY slajd lub kafelki oferty
+// Deadclick tooltip — tylko dla kliknięcia w AKTYWNY slajd lub kafelki oferty
 const tooltip = document.getElementById('deadclick-tooltip');
 const overlay = document.getElementById('deadclick-overlay');
 let tooltipTimeout;
 
 document.body.addEventListener('click', (e) => {
   const clickedSlide = e.target.closest('.carousel-slide');
-  const activeSlide = document.querySelector('.carousel-slide.active');
   const isOfferCard = e.target.closest('.oferta-grid .card');
 
-  // Klik w slajd
   if (clickedSlide) {
-    if (clickedSlide !== activeSlide) {
-      // Klik w NIEAKTYWNY slajd → tylko przesunięcie (tooltip NIE)
-      return;
+    const clickedIndex = slides.indexOf(clickedSlide);
+
+    if (clickedIndex !== currentIndex) {
+      // Klik w NIEAKTYWNY slajd → tylko przesunięcie
+      currentIndex = clickedIndex;
+      updateCarousel();
+      return; // nie pokazuj tooltipa
     }
-    // Klik w aktywny → tooltip
-  } 
-  // Klik w kafelek oferty
-  else if (!isOfferCard) {
-    return; // klik gdzie indziej → nic
+    // Klik w aktywny slajd → pokazujemy tooltip
+  } else if (!isOfferCard) {
+    return; // Klik poza slajdem i poza kafelkiem oferty → nic
   }
 
   // Pokaż tooltip
@@ -757,9 +758,6 @@ overlay.addEventListener('click', (e) => {
     setTimeout(() => overlay.classList.remove('show'), 300);
   }
 });
-
-
-
 
 </script>
 
@@ -786,6 +784,7 @@ overlay.addEventListener('click', (e) => {
   
 </body>
 </html>
+
 
 
 
