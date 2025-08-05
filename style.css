@@ -1129,7 +1129,7 @@ width: 100%;
 
 /* Aktywne stany */
 #deadclick-overlay.show {
-  display: flex;
+  display: flex !important;
 }
 #deadclick-tooltip.show {
   transform: scale(1);
@@ -1141,4 +1141,5 @@ width: 100%;
   margin-top: 15px;
   display: inline-block;
 }
+
 
