@@ -730,6 +730,48 @@ testimonialSection.addEventListener('click', () => {
   testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
 });
 
+// Tooltip logic
+const tooltip = document.getElementById('deadclick-tooltip');
+const overlay = document.getElementById('deadclick-overlay');
+let tooltipTimeout;
+
+document.body.addEventListener('click', (e) => {
+  const clickedSlide = e.target.closest('.carousel-slide');
+  const isOfferCard = e.target.closest('.oferta-grid .card');
+
+  // Kliknięcie w slajd
+  if (clickedSlide) {
+    const clickedIndex = slides.indexOf(clickedSlide);
+    if (clickedIndex !== currentIndex) {
+      // Klik w NIEAKTYWNY slajd → przesuwamy
+      currentIndex = clickedIndex;
+      updateCarousel();
+      return;
+    }
+  } else if (!isOfferCard) {
+    // Klik poza aktywnym slajdem i poza kafelkiem oferty → nic
+    return;
+  }
+
+  // Pokaż tooltip
+  overlay.classList.add('show');
+  setTimeout(() => tooltip.classList.add('show'), 10);
+
+  // Auto-zamknięcie
+  clearTimeout(tooltipTimeout);
+  tooltipTimeout = setTimeout(() => {
+    tooltip.classList.remove('show');
+    setTimeout(() => overlay.classList.remove('show'), 300);
+  }, 3000);
+});
+
+// Kliknięcie w overlay = zamknięcie
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) {
+    tooltip.classList.remove('show');
+    setTimeout(() => overlay.classList.remove('show'), 300);
+  }
+});
 
 
 </script>
@@ -738,5 +780,23 @@ testimonialSection.addEventListener('click', () => {
   <p style="color:red;">Please enable JavaScript to view the interactive parts of this site.</p>
 </noscript>
 
+
+<!-- Deadclick Tooltip -->
+<div id="deadclick-overlay">
+  <div id="deadclick-tooltip">
+    <div class="tooltip-content">
+      <p>
+        <strong style="display:block; font-size:18px; margin-bottom:8px;">Wanna know more?</strong>
+        Let's meet and talk!
+      </p>
+      <a href="https://calendar.app.google/JPUhYfYCmYX7eH3z6" target="_blank" class="button inline-block">
+        <span>Pick a time</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+  
 </body>
 </html>
+
