@@ -686,57 +686,40 @@ carouselObserver.observe(carouselWrapper);
   });
 
   // Global function
-  document.addEventListener('DOMContentLoaded', () => {
-    dynamicContent.textContent = '';
-    cursor.textContent = '_';
-    typePhrase();
-    ensureAllImagesLoaded(() => {
-      setCarouselHeight();
-      updateCarousel();
-    });
-    
-  // Testimonials
-    const testimonialGrid = document.querySelector('.testimonial-grid');
-    testimonialGrid.innerHTML += testimonialGrid.innerHTML;
-    const section = document.getElementById('testimonials');
-    section.addEventListener('mouseenter', () => {
-      testimonialGrid.style.animationPlayState = 'paused';
-    });
-    section.addEventListener('mouseleave', () => {
-      testimonialGrid.style.animationPlayState = 'running';
-    });
+ document.addEventListener('DOMContentLoaded', () => {
+  // Inicjalizacja dynamicznego tekstu
+  dynamicContent.textContent = '';
+  cursor.textContent = '_';
+  typePhrase();
+  ensureAllImagesLoaded(() => {
+    setCarouselHeight();
+    updateCarousel();
   });
-  
-  const testimonialStyle = document.createElement('style');
-  testimonialStyle.innerHTML = `
-    @keyframes scrollTestimonials {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .testimonial-grid {
-      animation: scrollTestimonials 60s linear infinite;
-    }
-  `;
-  document.head.appendChild(testimonialStyle);
 
+  // Testimonials - duplikacja do płynnego scrolla
+  const testimonialGrid = document.querySelector('.testimonial-grid');
+  testimonialGrid.innerHTML += testimonialGrid.innerHTML;
+  const section = document.getElementById('testimonials');
+  section.addEventListener('mouseenter', () => {
+    testimonialGrid.style.animationPlayState = 'paused';
+  });
+  section.addEventListener('mouseleave', () => {
+    testimonialGrid.style.animationPlayState = 'running';
+  });
 
-let testimonialPaused = false;
+  // Kliknięcie pauzuje/wznawia animację testimoniali
+  let testimonialPaused = false;
+  section.addEventListener('click', () => {
+    testimonialPaused = !testimonialPaused;
+    testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
+  });
 
-const testimonialGrid = document.querySelector('.testimonial-grid');
-const testimonialSection = document.getElementById('testimonials');
-
-testimonialSection.addEventListener('click', () => {
-  testimonialPaused = !testimonialPaused;
-  testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+  // Deadclick tooltip
   const tooltip = document.getElementById('deadclick-tooltip');
   const overlay = document.getElementById('deadclick-overlay');
   let tooltipTimeout;
 
   document.body.addEventListener('click', (e) => {
-    // Ignoruj kliknięcia w elementy klikalne
     if (e.target.closest('a, button, input, textarea, select, .menu-toggle, .nav-links')) return;
 
     overlay.classList.add('show');
@@ -755,9 +738,6 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => overlay.classList.remove('show'), 300);
     }
   });
-});
-
-
 });
 
 
@@ -782,6 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
 </body>
 </html>
+
 
 
 
