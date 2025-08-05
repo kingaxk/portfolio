@@ -425,37 +425,75 @@
 </section>
 
 <script>
-AOS.init();
+  AOS.init();
+  
+  const dynamicContent = document.getElementById('dynamic-content');
+  const cursor = document.getElementById('cursor');
+  
+  const phrases = ["Kinga", "UX Researcher", "Information Architect", "Data Analyst"];
+  let phraseIndex = 0;
+  let letterIndex = 0;
 
-const dynamicContent = document.getElementById('dynamic-content');
-const cursor = document.getElementById('cursor');
-const phrases = ["Kinga", "UX Researcher", "Information Architect", "Data Analyst"];
-let phraseIndex = 0;
-let letterIndex = 0;
+
+
 let isHeroVisible = true;
 let typingPaused = false;
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => { isHeroVisible = entry.isIntersecting; });
-},{ threshold: 0.1 });
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry => {
+      isHeroVisible = entry.isIntersecting;
+    });
+  },
+  { threshold: 0.1 }
+);
+
 observer.observe(document.getElementById('hero'));
 
-function typePhrase() {
-  if (!isHeroVisible) { typingPaused = true; return; }
+setInterval(() => {
+  if (isHeroVisible && typingPaused) {
+    typingPaused = false;
+    if (letterIndex === 0) {
+      typePhrase();
+    } else if (letterIndex < phrases[phraseIndex].length) {
+      typePhrase();
+    } else {
+      erasePhrase();
+    }
+  }
+}, 1000);
+
+
+  
+  function typePhrase() {
+  if (!isHeroVisible) {
+    typingPaused = true;
+    return;
+  }
+
   typingPaused = false;
+
   if (letterIndex < phrases[phraseIndex].length) {
     dynamicContent.textContent += phrases[phraseIndex][letterIndex];
     letterIndex++;
     setTimeout(typePhrase, 100);
   } else {
     cursor.style.opacity = '0';
-    setTimeout(() => { cursor.style.opacity = '1'; erasePhrase(); }, 1500);
+    setTimeout(() => {
+      cursor.style.opacity = '1';
+      erasePhrase();
+    }, 1500);
   }
 }
 
 function erasePhrase() {
-  if (!isHeroVisible) { typingPaused = true; return; }
+  if (!isHeroVisible) {
+    typingPaused = true;
+    return;
+  }
+
   typingPaused = false;
+
   if (letterIndex > 0) {
     dynamicContent.textContent = phrases[phraseIndex].substring(0, letterIndex - 1);
     letterIndex--;
@@ -466,134 +504,249 @@ function erasePhrase() {
   }
 }
 
-setInterval(() => {
-  if (isHeroVisible && typingPaused) {
-    typingPaused = false;
-    if (letterIndex === 0) { typePhrase(); }
-    else if (letterIndex < phrases[phraseIndex].length) { typePhrase(); }
-    else { erasePhrase(); }
-  }
-}, 1000);
 
-// Scroll progress
-window.addEventListener('scroll', () => {
-  const scrollProgress = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-  document.getElementById('progress-bar').style.width = `${scrollProgress}%`;
-});
-
-// Carousel
-const track = document.querySelector('.carousel-track');
-const slides = Array.from(track.children);
-const prevBtn = document.querySelector('.carousel-btn.prev');
-const nextBtn = document.querySelector('.carousel-btn.next');
-const dotsContainer = document.querySelector('.carousel-dots');
-const carouselWrapper = document.querySelector('.carousel-wrapper');
-let currentIndex = 0;
-
-function setCarouselHeight() {
-  const wrapper = document.querySelector('.carousel-wrapper');
-  const container = document.querySelector('.carousel-track-container'); 
-  let maxHeight = 0;
-  slides.forEach(slide => {
-    slide.style.height = 'auto';
-    const height = slide.offsetHeight;
-    if (height > maxHeight) maxHeight = height;
+  
+  // Scroll progress
+  window.addEventListener('scroll', () => {
+    const scrollProgress = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    document.getElementById('progress-bar').style.width = `${scrollProgress}%`;
   });
-  [wrapper, container].forEach(el => el.style.height = `${maxHeight}px`);
-}
-
-function updateCarousel() {
-  const activeSlide = slides[currentIndex];
-  const container = document.querySelector('.carousel-track-container');
-  const containerCenter = container.offsetWidth / 2;
-  const slideCenter = activeSlide.offsetLeft + activeSlide.offsetWidth / 2;
-  const scrollPosition = slideCenter - containerCenter;
-  track.style.transform = `translateX(${-scrollPosition}px)`;
-  slides.forEach(slide => slide.classList.remove('active'));
-  activeSlide.classList.add('active');
-  updateDots();
-  setCarouselHeight();
-}
-
-slides.forEach((_, index) => {
-  const dot = document.createElement('button');
-  dot.classList.add('carousel-dot');
-  if (index === 0) dot.classList.add('active');
-  dotsContainer.appendChild(dot);
-  dot.addEventListener('click', () => { currentIndex = index; updateCarousel(); });
-});
-
-function updateDots() {
-  const dots = document.querySelectorAll('.carousel-dot');
-  dots.forEach(dot => dot.classList.remove('active'));
-  dots[currentIndex].classList.add('active');
-}
-
-prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + slides.length) % slides.length; updateCarousel(); });
-nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % slides.length; updateCarousel(); });
-
-// Autoplay
-let userInteractedWithCarousel = false;
-let projectAutoPlay;
-function pauseAutoplay() { clearInterval(projectAutoPlay); projectAutoPlay = null; }
-
-carouselWrapper.addEventListener('touchstart', () => { userInteractedWithCarousel = true; pauseAutoplay(); });
-carouselWrapper.addEventListener('mousedown', () => { userInteractedWithCarousel = true; pauseAutoplay(); });
-
-const carouselObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !projectAutoPlay && !userInteractedWithCarousel) {
-      projectAutoPlay = setInterval(() => { currentIndex = (currentIndex + 1) % slides.length; updateCarousel(); }, 3000);
+  
+  // Carousel logic
+  const track = document.querySelector('.carousel-track');
+  const slides = Array.from(track.children);
+  const prevBtn = document.querySelector('.carousel-btn.prev');
+  const nextBtn = document.querySelector('.carousel-btn.next');
+  const dotsContainer = document.querySelector('.carousel-dots');
+  const carouselWrapper = document.querySelector('.carousel-wrapper');
+  let currentIndex = 0;
+  let startX;
+  
+  function setCarouselHeight() {
+    const wrapper = document.querySelector('.carousel-wrapper');
+    const container = document.querySelector('.carousel-track-container'); 
+    const slides = document.querySelectorAll('.carousel-slide');
+    let maxHeight = 0;
+    slides.forEach(slide => {
+      slide.style.height = 'auto';
+      const height = slide.offsetHeight;
+      if (height > maxHeight) maxHeight = height;
+    });
+    [wrapper, container].forEach(el => el.style.height = `${maxHeight}px`);
+  }
+  
+  track.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+  });
+  track.addEventListener('touchend', e => {
+    const endX = e.changedTouches[0].clientX;
+    const deltaX = endX - startX;
+    if (deltaX > 50) {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      updateCarousel();
+    } else if (deltaX < -50) {
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateCarousel();
     }
   });
-},{ threshold: 0.25 });
-carouselObserver.observe(carouselWrapper);
+  
+  function ensureAllImagesLoaded(callback) {
+    const images = document.querySelectorAll('.carousel-slide img');
+    let loadedCount = 0;
+    const totalImages = images.length;
+    if (totalImages === 0) { callback(); return; }
+    images.forEach(img => {
+      if (img.complete) {
+        loadedCount++;
+      } else {
+        img.addEventListener('load', () => {
+          loadedCount++;
+          if (loadedCount === totalImages) callback();
+        });
+        img.addEventListener('error', () => {
+          loadedCount++;
+          if (loadedCount === totalImages) callback();
+        });
+      }
+    });
+    if (loadedCount === totalImages) callback();
+  }
+  
+  function updateCarousel() {
+    const activeSlide = slides[currentIndex];
+    const container = document.querySelector('.carousel-track-container');
+    const containerCenter = container.offsetWidth / 2;
+    const slideCenter = activeSlide.offsetLeft + activeSlide.offsetWidth / 2;
+    const scrollPosition = slideCenter - containerCenter;
+    track.style.transform = `translateX(${-scrollPosition}px)`;
+    slides.forEach(slide => slide.classList.remove('active'));
+    activeSlide.classList.add('active');
+    updateDots();
+    setCarouselHeight();
+  }
+  
+  slides.forEach((_, index) => {
+    const dot = document.createElement('button');
+    dot.classList.add('carousel-dot');
+    if (index === 0) dot.classList.add('active');
+    dotsContainer.appendChild(dot);
+    dot.addEventListener('click', () => {
+      currentIndex = index;
+      updateCarousel();
+      updateDots();
+    });
+  });
 
-// Menu
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
-menuToggle.addEventListener('click', () => { navLinks.classList.toggle('active'); menuToggle.classList.toggle('open'); });
-document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => { navLinks.classList.remove('active'); menuToggle.classList.remove('open'); }));
-
-// Testimonials scroll pause
-const testimonialGrid = document.querySelector('.testimonial-grid');
-testimonialGrid.innerHTML += testimonialGrid.innerHTML;
-const section = document.getElementById('testimonials');
-let testimonialPaused = false;
-section.addEventListener('mouseenter', () => { testimonialGrid.style.animationPlayState = 'paused'; });
-section.addEventListener('mouseleave', () => { testimonialGrid.style.animationPlayState = 'running'; });
-section.addEventListener('click', () => { testimonialPaused = !testimonialPaused; testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running'; });
-
-// Tooltip: pokazuje się tylko na aktywnym slajdzie (drugie kliknięcie) lub kafelkach oferty
-const tooltip = document.getElementById('deadclick-tooltip');
-const overlay = document.getElementById('deadclick-overlay');
-let tooltipTimeout;
-
-document.body.addEventListener('click', (e) => {
-  const clickedSlide = e.target.closest('.carousel-slide');
-  const activeSlide = document.querySelector('.carousel-slide.active');
-  const isOfferCard = e.target.closest('.oferta-grid .card');
-
-  if (clickedSlide) {
-    if (clickedSlide !== activeSlide) { currentIndex = [...slides].indexOf(clickedSlide); updateCarousel(); return; }
-  } else if (!isOfferCard) return;
-
-  overlay.classList.add('show');
-  setTimeout(() => tooltip.classList.add('show'), 10);
-  clearTimeout(tooltipTimeout);
-  tooltipTimeout = setTimeout(() => { tooltip.classList.remove('show'); setTimeout(() => overlay.classList.remove('show'), 300); }, 3000);
+slides.forEach((slide, index) => {
+  slide.addEventListener('click', () => {
+    if (index !== currentIndex) {
+      currentIndex = index;
+      updateCarousel();
+    }
+  });
 });
 
-overlay.addEventListener('click', (e) => { if (e.target === overlay) { tooltip.classList.remove('show'); setTimeout(() => overlay.classList.remove('show'), 300); } });
+  
+  function updateDots() {
+    const dots = document.querySelectorAll('.carousel-dot');
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[currentIndex].classList.add('active');
+  }
+  
+  prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    updateCarousel();
+  });
+  
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    updateCarousel();
+  });
+  
+  // Autoplay carousel
+  let userInteractedWithCarousel = false;
+  let projectAutoPlay;
 
-// Init
-dynamicContent.textContent = '';
-cursor.textContent = '_';
-typePhrase();
-setCarouselHeight();
-updateCarousel();
+  function pauseAutoplay() {
+    clearInterval(projectAutoPlay);
+    projectAutoPlay = null;
+  }
+  
+
+  carouselWrapper.addEventListener('touchstart', () => {
+  userInteractedWithCarousel = true;
+  pauseAutoplay();
+});
+
+carouselWrapper.addEventListener('mousedown', () => {
+  userInteractedWithCarousel = true;
+  pauseAutoplay();
+});
+
+  carouselWrapper.addEventListener('touchstart', () => {
+  userInteractedWithCarousel = true;
+  pauseAutoplay();
+});
+
+carouselWrapper.addEventListener('mousedown', () => {
+  userInteractedWithCarousel = true;
+  pauseAutoplay();
+});
+
+  const carouselObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !projectAutoPlay && !userInteractedWithCarousel) {
+        projectAutoPlay = setInterval(() => {
+          currentIndex = (currentIndex + 1) % slides.length;
+          updateCarousel();
+        }, 3000);
+      }
+    });
+  },
+  { threshold: 0.25 }
+);
+
+carouselObserver.observe(carouselWrapper);
+
+  
+  // Mobile menu
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    menuToggle.classList.toggle('open');
+  });
+  const links = document.querySelectorAll('.nav-links a');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+      menuToggle.classList.remove('open');
+    });
+  });
+
+ // Global function
+document.addEventListener('DOMContentLoaded', () => {
+  // Inicjalizacja dynamicznego tekstu
+  dynamicContent.textContent = '';
+  cursor.textContent = '_';
+  typePhrase();
+  ensureAllImagesLoaded(() => {
+    setCarouselHeight();
+    updateCarousel();
+  });
+
+  // Testimonials - duplikacja do płynnego scrolla
+  const testimonialGrid = document.querySelector('.testimonial-grid');
+  testimonialGrid.innerHTML += testimonialGrid.innerHTML;
+  const section = document.getElementById('testimonials');
+  section.addEventListener('mouseenter', () => {
+    testimonialGrid.style.animationPlayState = 'paused';
+  });
+  section.addEventListener('mouseleave', () => {
+    testimonialGrid.style.animationPlayState = 'running';
+  });
+
+  // Kliknięcie pauzuje/wznawia animację testimoniali
+  let testimonialPaused = false;
+  section.addEventListener('click', () => {
+    testimonialPaused = !testimonialPaused;
+    testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
+  });
+
+  // Deadclick tooltip — tylko centralny slajd + kafelki oferty
+  const tooltip = document.getElementById('deadclick-tooltip');
+  const overlay = document.getElementById('deadclick-overlay');
+  let tooltipTimeout;
+
+  document.body.addEventListener('click', (e) => {
+    const activeSlide = document.querySelector('.carousel-slide.active');
+    const isCentralSlide = activeSlide && activeSlide.contains(e.target);
+    const isOfferCard = e.target.closest('.oferta-grid .card');
+
+    // Pokaż tooltip tylko dla centralnego slajdu i kafelków oferty
+    if (!isCentralSlide && !isOfferCard) return;
+
+    overlay.classList.add('show');
+    setTimeout(() => tooltip.classList.add('show'), 10);
+
+    clearTimeout(tooltipTimeout);
+    tooltipTimeout = setTimeout(() => {
+      tooltip.classList.remove('show');
+      setTimeout(() => overlay.classList.remove('show'), 300);
+    }, 3000);
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      tooltip.classList.remove('show');
+      setTimeout(() => overlay.classList.remove('show'), 300);
+    }
+  });
+});
+
+
 </script>
-
 
 <noscript>
   <p style="color:red;">Please enable JavaScript to view the interactive parts of this site.</p>
@@ -618,10 +771,6 @@ updateCarousel();
   
 </body>
 </html>
-
-
-
-
 
 
 
