@@ -573,7 +573,6 @@ function erasePhrase() {
   }
   
   function updateCarousel() {
-    slides = Array.from(track.children);
     const activeSlide = slides[currentIndex];
     const container = document.querySelector('.carousel-track-container');
     const containerCenter = container.offsetWidth / 2;
@@ -715,31 +714,29 @@ document.addEventListener('DOMContentLoaded', () => {
     testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
   });
 
-// Ustaw pierwszy slajd jako aktywny na starcie
-slides[currentIndex].classList.add('active');
-
-// Deadclick tooltip — tylko dla kliknięcia w AKTYWNY slajd lub kafelki oferty
-// Deadclick tooltip — tylko dla kliknięcia w AKTYWNY slajd lub kafelki oferty
+// Deadclick tooltip — tylko 2 kliknięcie na aktywny slajd lub klik na kafelek oferty
 const tooltip = document.getElementById('deadclick-tooltip');
 const overlay = document.getElementById('deadclick-overlay');
 let tooltipTimeout;
 
 document.body.addEventListener('click', (e) => {
   const clickedSlide = e.target.closest('.carousel-slide');
+  const activeSlide = document.querySelector('.carousel-slide.active');
   const isOfferCard = e.target.closest('.oferta-grid .card');
 
+  // Klik na slajd karuzeli
   if (clickedSlide) {
-    const clickedIndex = Array.from(slides).indexOf(clickedSlide);
-
-    if (clickedIndex !== currentIndex) {
-      // Klik w NIEAKTYWNY slajd → tylko przesunięcie
-      currentIndex = clickedIndex;
+    if (clickedSlide !== activeSlide) {
+      // Jeśli kliknięto w nieaktywny slajd → tylko przesuń karuzelę
+      currentIndex = [...slides].indexOf(clickedSlide);
       updateCarousel();
-      return; // nie pokazuj tooltipa
-    }
-    // Klik w aktywny slajd → pokazujemy tooltip
-  } else if (!isOfferCard) {
-    return; // Klik poza slajdem i poza kafelkiem oferty → nic
+      return; // NIE pokazuj tooltipa
+    } 
+    // Jeśli kliknięto w aktywny slajd → pokaż tooltip
+  } 
+  // Klik na kafelek oferty — też pokazuje tooltip
+  else if (!isOfferCard) {
+    return; // jeśli to nie oferta ani aktywny slajd — nic
   }
 
   // Pokaż tooltip
@@ -759,6 +756,8 @@ overlay.addEventListener('click', (e) => {
     setTimeout(() => overlay.classList.remove('show'), 300);
   }
 });
+
+
 
 </script>
 
@@ -785,9 +784,6 @@ overlay.addEventListener('click', (e) => {
   
 </body>
 </html>
-
-
-
 
 
 
