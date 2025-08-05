@@ -685,8 +685,8 @@ carouselObserver.observe(carouselWrapper);
     });
   });
 
-  // Global function
- document.addEventListener('DOMContentLoaded', () => {
+ // Global function
+document.addEventListener('DOMContentLoaded', () => {
   // Inicjalizacja dynamicznego tekstu
   dynamicContent.textContent = '';
   cursor.textContent = '_';
@@ -714,13 +714,18 @@ carouselObserver.observe(carouselWrapper);
     testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
   });
 
-  // Deadclick tooltip
+  // Deadclick tooltip — tylko centralny slajd + kafelki oferty
   const tooltip = document.getElementById('deadclick-tooltip');
   const overlay = document.getElementById('deadclick-overlay');
   let tooltipTimeout;
 
   document.body.addEventListener('click', (e) => {
-    if (e.target.closest('a, button, input, textarea, select, .menu-toggle, .nav-links')) return;
+    const activeSlide = document.querySelector('.carousel-slide.active');
+    const isCentralSlide = activeSlide && activeSlide.contains(e.target);
+    const isOfferCard = e.target.closest('.oferta-grid .card');
+
+    // Pokaż tooltip tylko dla centralnego slajdu i kafelków oferty
+    if (!isCentralSlide && !isOfferCard) return;
 
     overlay.classList.add('show');
     setTimeout(() => tooltip.classList.add('show'), 10);
@@ -766,6 +771,7 @@ carouselObserver.observe(carouselWrapper);
   
 </body>
 </html>
+
 
 
 
