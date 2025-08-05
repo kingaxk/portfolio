@@ -746,33 +746,32 @@ testimonialSection.addEventListener('click', () => {
   testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
 });
 
-// Deadclick tooltip logic
-const tooltip = document.getElementById('deadclick-tooltip');
-const overlay = document.getElementById('deadclick-overlay');
-let tooltipTimeout;
+document.addEventListener('DOMContentLoaded', () => {
+  const tooltip = document.getElementById('deadclick-tooltip');
+  const overlay = document.getElementById('deadclick-overlay');
+  let tooltipTimeout;
 
-document.body.addEventListener('click', (e) => {
-  // Jeśli kliknięto w klikalne elementy (linki, przyciski, formularze) – pomijamy
-  if (e.target.closest('a, button, input, textarea, select')) return;
+  document.body.addEventListener('click', (e) => {
+    if (e.target.closest('a, button, input, textarea, select')) return;
 
-  // Pokaż overlay + tooltip
-  overlay.classList.add('show');
-  setTimeout(() => tooltip.classList.add('show'), 10);
+    overlay.classList.add('show');
+    setTimeout(() => tooltip.classList.add('show'), 10);
 
-  // Schowaj po 3 sekundach
-  clearTimeout(tooltipTimeout);
-  tooltipTimeout = setTimeout(() => {
-    tooltip.classList.remove('show');
-    setTimeout(() => overlay.classList.remove('show'), 300);
-  }, 3000);
+    clearTimeout(tooltipTimeout);
+    tooltipTimeout = setTimeout(() => {
+      tooltip.classList.remove('show');
+      setTimeout(() => overlay.classList.remove('show'), 300);
+    }, 3000);
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      tooltip.classList.remove('show');
+      setTimeout(() => overlay.classList.remove('show'), 300);
+    }
+  });
 });
 
-// Kliknięcie w overlay zamyka tooltip natychmiast
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) {
-    tooltip.classList.remove('show');
-    setTimeout(() => overlay.classList.remove('show'), 300);
-  }
 });
 
 
@@ -787,5 +786,6 @@ overlay.addEventListener('click', (e) => {
   
 </body>
 </html>
+
 
 
