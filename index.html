@@ -714,36 +714,49 @@ document.addEventListener('DOMContentLoaded', () => {
     testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
   });
 
-  // Deadclick tooltip — tylko centralny slajd + kafelki oferty
-  const tooltip = document.getElementById('deadclick-tooltip');
-  const overlay = document.getElementById('deadclick-overlay');
-  let tooltipTimeout;
+// Deadclick tooltip — tylko dla kliknięcia w AKTYWNY slajd lub kafelki oferty
+const tooltip = document.getElementById('deadclick-tooltip');
+const overlay = document.getElementById('deadclick-overlay');
+let tooltipTimeout;
 
-  document.body.addEventListener('click', (e) => {
-    const activeSlide = document.querySelector('.carousel-slide.active');
-    const isCentralSlide = activeSlide && activeSlide.contains(e.target);
-    const isOfferCard = e.target.closest('.oferta-grid .card');
+document.body.addEventListener('click', (e) => {
+  const clickedSlide = e.target.closest('.carousel-slide'); // w co kliknięto
+  const activeSlide = document.querySelector('.carousel-slide.active');
+  const isOfferCard = e.target.closest('.oferta-grid .card');
 
-    // Pokaż tooltip tylko dla centralnego slajdu i kafelków oferty
-    if (!isCentralSlide && !isOfferCard) return;
-
-    overlay.classList.add('show');
-    setTimeout(() => tooltip.classList.add('show'), 10);
-
-    clearTimeout(tooltipTimeout);
-    tooltipTimeout = setTimeout(() => {
-      tooltip.classList.remove('show');
-      setTimeout(() => overlay.classList.remove('show'), 300);
-    }, 3000);
-  });
-
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      tooltip.classList.remove('show');
-      setTimeout(() => overlay.classList.remove('show'), 300);
+  // Klik w slajd karuzeli
+  if (clickedSlide) {
+    if (clickedSlide !== activeSlide) {
+      // Jeśli kliknięto w NIEAKTYWNY slajd → tylko przesuwamy karuzelę
+      currentIndex = [...slides].indexOf(clickedSlide);
+      updateCarousel();
+      return; // nie pokazuj tooltipa
     }
-  });
+    // Jeśli kliknięto w aktywny slajd → pokaż tooltip
+  } 
+  // Klik w kafelek oferty
+  else if (!isOfferCard) {
+    return; // klik gdzie indziej → nic nie robimy
+  }
+
+  // Pokaż tooltip
+  overlay.classList.add('show');
+  setTimeout(() => tooltip.classList.add('show'), 10);
+
+  clearTimeout(tooltipTimeout);
+  tooltipTimeout = setTimeout(() => {
+    tooltip.classList.remove('show');
+    setTimeout(() => overlay.classList.remove('show'), 300);
+  }, 3000);
 });
+
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) {
+    tooltip.classList.remove('show');
+    setTimeout(() => overlay.classList.remove('show'), 300);
+  }
+});
+
 
 
 </script>
@@ -771,6 +784,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
 </body>
 </html>
+
 
 
 
