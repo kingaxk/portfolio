@@ -730,6 +730,34 @@ testimonialSection.addEventListener('click', () => {
   testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
 });
 
+// Deadclick tooltip logic
+const tooltip = document.getElementById('deadclick-tooltip');
+const overlay = document.getElementById('deadclick-overlay');
+let tooltipTimeout;
+
+document.body.addEventListener('click', (e) => {
+  // Jeśli kliknięto w klikalne elementy (linki, przyciski, formularze) – pomijamy
+  if (e.target.closest('a, button, input, textarea, select')) return;
+
+  // Pokaż overlay + tooltip
+  overlay.classList.add('show');
+  setTimeout(() => tooltip.classList.add('show'), 10);
+
+  // Schowaj po 3 sekundach
+  clearTimeout(tooltipTimeout);
+  tooltipTimeout = setTimeout(() => {
+    tooltip.classList.remove('show');
+    setTimeout(() => overlay.classList.remove('show'), 300);
+  }, 3000);
+});
+
+// Kliknięcie w overlay zamyka tooltip natychmiast
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) {
+    tooltip.classList.remove('show');
+    setTimeout(() => overlay.classList.remove('show'), 300);
+  }
+});
 
 
 </script>
@@ -738,5 +766,19 @@ testimonialSection.addEventListener('click', () => {
   <p style="color:red;">Please enable JavaScript to view the interactive parts of this site.</p>
 </noscript>
 
+<!-- Deadclick Tooltip -->
+<div id="deadclick-overlay">
+  <div id="deadclick-tooltip">
+    <div class="tooltip-content">
+      <p>Wanna know more? Let's meet and talk!</p>
+      <a href="https://calendar.app.google/JPUhYfYCmYX7eH3z6" target="_blank" class="button inline-block">
+        <span>Pick a time</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+  
 </body>
 </html>
+
