@@ -686,91 +686,58 @@ carouselObserver.observe(carouselWrapper);
   });
 
   // Global function
-  document.addEventListener('DOMContentLoaded', () => {
-    dynamicContent.textContent = '';
-    cursor.textContent = '_';
-    typePhrase();
-    ensureAllImagesLoaded(() => {
-      setCarouselHeight();
-      updateCarousel();
-    });
-    
-  // Testimonials
-    const testimonialGrid = document.querySelector('.testimonial-grid');
-    testimonialGrid.innerHTML += testimonialGrid.innerHTML;
-    const section = document.getElementById('testimonials');
-    section.addEventListener('mouseenter', () => {
-      testimonialGrid.style.animationPlayState = 'paused';
-    });
-    section.addEventListener('mouseleave', () => {
-      testimonialGrid.style.animationPlayState = 'running';
-    });
+ document.addEventListener('DOMContentLoaded', () => {
+  // Inicjalizacja dynamicznego tekstu
+  dynamicContent.textContent = '';
+  cursor.textContent = '_';
+  typePhrase();
+  ensureAllImagesLoaded(() => {
+    setCarouselHeight();
+    updateCarousel();
   });
-  
-  const testimonialStyle = document.createElement('style');
-  testimonialStyle.innerHTML = `
-    @keyframes scrollTestimonials {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+
+  // Testimonials - duplikacja do płynnego scrolla
+  const testimonialGrid = document.querySelector('.testimonial-grid');
+  testimonialGrid.innerHTML += testimonialGrid.innerHTML;
+  const section = document.getElementById('testimonials');
+  section.addEventListener('mouseenter', () => {
+    testimonialGrid.style.animationPlayState = 'paused';
+  });
+  section.addEventListener('mouseleave', () => {
+    testimonialGrid.style.animationPlayState = 'running';
+  });
+
+  // Kliknięcie pauzuje/wznawia animację testimoniali
+  let testimonialPaused = false;
+  section.addEventListener('click', () => {
+    testimonialPaused = !testimonialPaused;
+    testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
+  });
+
+  // Deadclick tooltip
+  const tooltip = document.getElementById('deadclick-tooltip');
+  const overlay = document.getElementById('deadclick-overlay');
+  let tooltipTimeout;
+
+  document.body.addEventListener('click', (e) => {
+    if (e.target.closest('a, button, input, textarea, select, .menu-toggle, .nav-links')) return;
+
+    overlay.classList.add('show');
+    setTimeout(() => tooltip.classList.add('show'), 10);
+
+    clearTimeout(tooltipTimeout);
+    tooltipTimeout = setTimeout(() => {
+      tooltip.classList.remove('show');
+      setTimeout(() => overlay.classList.remove('show'), 300);
+    }, 3000);
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      tooltip.classList.remove('show');
+      setTimeout(() => overlay.classList.remove('show'), 300);
     }
-    .testimonial-grid {
-      animation: scrollTestimonials 60s linear infinite;
-    }
-  `;
-  document.head.appendChild(testimonialStyle);
-
-
-let testimonialPaused = false;
-
-const testimonialGrid = document.querySelector('.testimonial-grid');
-const testimonialSection = document.getElementById('testimonials');
-
-testimonialSection.addEventListener('click', () => {
-  testimonialPaused = !testimonialPaused;
-  testimonialGrid.style.animationPlayState = testimonialPaused ? 'paused' : 'running';
-});
-
-// Tooltip logic
-const tooltip = document.getElementById('deadclick-tooltip');
-const overlay = document.getElementById('deadclick-overlay');
-let tooltipTimeout;
-
-document.body.addEventListener('click', (e) => {
-  const clickedSlide = e.target.closest('.carousel-slide');
-  const isOfferCard = e.target.closest('.oferta-grid .card');
-
-  // Kliknięcie w slajd
-  if (clickedSlide) {
-    const clickedIndex = slides.indexOf(clickedSlide);
-    if (clickedIndex !== currentIndex) {
-      // Klik w NIEAKTYWNY slajd → przesuwamy
-      currentIndex = clickedIndex;
-      updateCarousel();
-      return;
-    }
-  } else if (!isOfferCard) {
-    // Klik poza aktywnym slajdem i poza kafelkiem oferty → nic
-    return;
-  }
-
-  // Pokaż tooltip
-  overlay.classList.add('show');
-  setTimeout(() => tooltip.classList.add('show'), 10);
-
-  // Auto-zamknięcie
-  clearTimeout(tooltipTimeout);
-  tooltipTimeout = setTimeout(() => {
-    tooltip.classList.remove('show');
-    setTimeout(() => overlay.classList.remove('show'), 300);
-  }, 3000);
-});
-
-// Kliknięcie w overlay = zamknięcie
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) {
-    tooltip.classList.remove('show');
-    setTimeout(() => overlay.classList.remove('show'), 300);
-  }
+  });
 });
 
 
@@ -785,18 +752,17 @@ overlay.addEventListener('click', (e) => {
 <div id="deadclick-overlay">
   <div id="deadclick-tooltip">
     <div class="tooltip-content">
-      <p>
-        <strong style="display:block; font-size:18px; margin-bottom:8px;">Wanna know more?</strong>
-        Let's meet and talk!
-      </p>
+      <p>Wanna know more? Let's meet and talk!</p>
       <a href="https://calendar.app.google/JPUhYfYCmYX7eH3z6" target="_blank" class="button inline-block">
         <span>Pick a time</span>
       </a>
     </div>
   </div>
 </div>
-
   
 </body>
 </html>
+
+
+
 
