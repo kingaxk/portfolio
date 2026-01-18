@@ -774,6 +774,75 @@ input:focus, textarea:focus {
   outline: none;
 }
 
+
+/* === PROJECTS SWITCH (segmented control) === */
+.projects-switch {
+  width: min(980px, 100%);
+  margin: 18px auto 28px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  align-items: center;
+}
+
+.switch-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 10px;
+  cursor: pointer;
+
+  background: transparent;
+  color: rgba(245, 247, 250, 0.9);
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.1;
+  white-space: nowrap;
+
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.switch-btn:hover {
+  transform: translateY(-1px);
+}
+
+.switch-btn.is-active {
+  background: var(--color-light);
+  color: var(--color-dark);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+}
+
+.switch-btn:focus-visible {
+  outline: 3px solid rgba(255, 216, 111, 0.55);
+  outline-offset: 2px;
+}
+
+/* Mobile: 5 opcji przewijane w poziomie */
+@media (max-width: 720px) {
+  .projects-switch {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding: 6px;
+  }
+  .projects-switch::-webkit-scrollbar { display: none; }
+
+  .switch-btn {
+    flex: 0 0 auto;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+}
+
+
 /* === CAROUSEL === */
 
 .projects-group {
@@ -1026,8 +1095,8 @@ h3 { font-size: 1.75rem; font-weight: 700; }
 
 .flip-card {
   width: 100%;
-  max-width: 100%
-    margin: 0 auto;
+  max-width: 100%;
+  margin: 0 auto;
   height: auto;
   min-height: 260px; 
   }
@@ -1065,10 +1134,10 @@ padding: 0.5rem;
   }
 
   .slide-content {
-  padding: 1.5rem;
+  padding: 1.5 rem;
     flex-direction: column;
     align-items: center;
-gap: 1 rem;
+    gap: 1 rem;
     text-align: left;
   }
 
@@ -1151,6 +1220,7 @@ width: 100%;
   margin-top: 15px;
   display: inline-block;
 }
+
 
 
 
