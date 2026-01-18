@@ -825,22 +825,25 @@ input:focus, textarea:focus {
 }
 
 /* Mobile: 5 opcji przewijane w poziomie */
-@media (max-width: 720px) {
+@media (max-width: 800px) {
   .projects-switch {
     display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap;              /* <-- to sprawi, że będą “pod sobą” */
+    overflow-x: visible;          /* <-- bez poziomego scrolla */
     gap: 8px;
     padding: 6px;
+    border-radius: 24px;          /* trochę mniej “pill”, lepiej przy wrap */
   }
-  .projects-switch::-webkit-scrollbar { display: none; }
 
   .switch-btn {
-    flex: 0 0 auto;
+    flex: 1 1 220px;              /* <-- układa 2 w rzędzie / 1 w rzędzie zależnie od szerokości */
+    white-space: normal;          /* <-- pozwala łamać długie etykiety */
+    text-align: center;
     padding: 12px 14px;
     font-size: 0.95rem;
   }
 }
+
 
 
 /* === CAROUSEL === */
@@ -1220,6 +1223,7 @@ width: 100%;
   margin-top: 15px;
   display: inline-block;
 }
+
 
 
 
