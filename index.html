@@ -113,11 +113,29 @@
   <div class="container">
     <h2 class="text-center">Look at what I’ve done</h2>
 
-    <!-- #1 Analiza doświadczeń i optymalizacje procesów -->
-    <div class="projects-group">
-      <h3 class="projects-group-title">UX research & process optimization</h3>
+    <!-- Segmented switch -->
+    <div class="projects-switch" role="tablist" aria-label="Project categories">
+      <button class="switch-btn is-active" role="tab" aria-selected="true" tabindex="0" data-show="UX process">
+        UX research & process optimization
+      </button>
+      <button class="switch-btn" role="tab" aria-selected="false" tabindex="-1" data-show="data">
+        Data analytics & visualization
+      </button>
+      <button class="switch-btn" role="tab" aria-selected="false" tabindex="-1" data-show="strategy">
+        Product strategy
+      </button>
+      <button class="switch-btn" role="tab" aria-selected="false" tabindex="-1" data-show="design">
+       Design
+      </button>
+      <button class="switch-btn" role="tab" aria-selected="false" tabindex="-1" data-show="automations">
+        Automations
+      </button>
+    </div>
 
-      <div class="carousel-wrapper" data-carousel="process">
+
+    <!-- #1 Analiza doświadczeń i optymalizacje procesów -->
+    <div class="projects-group is-visible" data-group="UX process">
+      <div class="carousel-wrapper" data-carousel="UX process">
         <div class="carousel-track-container">
           <div class="carousel-track">
 
@@ -165,10 +183,8 @@
     </div>
 
     <!-- #2 Analiza danych -->
-    <div class="projects-group">
-      <h3 class="projects-group-title">Data analytics & visualization</h3>
-
-      <div class="carousel-wrapper" data-carousel="automation">
+    <div class="projects-group" data-group="data" hidden>
+      <div class="carousel-wrapper" data-carousel="data">
         <div class="carousel-track-container">
           <div class="carousel-track">
 
@@ -248,13 +264,9 @@
       </div>
     </div>
 
-
-
     <!-- #3 Stretegia UX -->
-    <div class="projects-group">
-      <h3 class="projects-group-title">Product stretegy</h3>
-
-      <div class="carousel-wrapper" data-carousel="automation">
+    <div class="projects-group" data-group="strategy" hidden>
+      <div class="carousel-wrapper" data-carousel="strategy">
         <div class="carousel-track-container">
           <div class="carousel-track">
 
@@ -304,10 +316,8 @@
 
 
     <!-- #4 Design -->
-    <div class="projects-group">
-      <h3 class="projects-group-title">Design</h3>
-
-      <div class="carousel-wrapper" data-carousel="automation">
+    <div class="projects-group" data-group="design" hidden>
+      <div class="carousel-wrapper" data-carousel="design">
         <div class="carousel-track-container">
           <div class="carousel-track">
 
@@ -401,10 +411,8 @@
     </div>
 
     <!-- #5 Automatyzacje -->
-    <div class="projects-group">
-      <h3 class="projects-group-title">Automations</h3>
-
-      <div class="carousel-wrapper" data-carousel="data">
+    <div class="projects-group" data-group="automations" hidden>
+      <div class="carousel-wrapper" data-carousel="automations">
         <div class="carousel-track-container">
           <div class="carousel-track">
 
@@ -655,175 +663,241 @@ function erasePhrase() {
   });
   
   // Carousel logic
-  function initCarousel(wrapper) {
-  const track = wrapper.querySelector('.carousel-track');
-  const slides = track ? Array.from(track.children) : [];
-  const prevBtn = wrapper.querySelector('.carousel-btn.prev');
-  const nextBtn = wrapper.querySelector('.carousel-btn.next');
-  const dotsContainer = wrapper.querySelector('.carousel-dots');
-  const container = wrapper.querySelector('.carousel-track-container');
+function initProjectsSwitch() {
+  const switchEl = document.querySelector('#projects .projects-switch');
+  if (!switchEl) return;
 
-  if (!track || slides.length === 0 || !prevBtn || !nextBtn || !dotsContainer || !container) return;
+  const buttons = Array.from(switchEl.querySelectorAll('.switch-btn'));
+  const groups = Array.from(document.querySelectorAll('#projects .projects-group'));
 
-  let currentIndex = 0;
-  let startX = 0;
-  let userInteracted = false;
-  let autoplay = null;
-
-  function setCarouselHeight() {
-    let maxHeight = 0;
-    slides.forEach(slide => {
-      slide.style.height = 'auto';
-      const h = slide.offsetHeight;
-      if (h > maxHeight) maxHeight = h;
-    });
-    wrapper.style.height = `${maxHeight}px`;
-    container.style.height = `${maxHeight}px`;
-  }
-
-  function ensureImagesLoaded(callback) {
-    const images = wrapper.querySelectorAll('.carousel-slide img');
-    let loaded = 0;
-    const total = images.length;
-    if (total === 0) { callback(); return; }
-
-    images.forEach(img => {
-      if (img.complete) {
-        loaded++;
-      } else {
-        img.addEventListener('load', () => {
-          loaded++;
-          if (loaded === total) callback();
-        });
-        img.addEventListener('error', () => {
-          loaded++;
-          if (loaded === total) callback();
-        });
-      }
+  function show(key) {
+    // toggle groups
+    groups.forEach(g => {
+      const match = g.dataset.group === key;
+      if (match) g.removeAttribute('hidden');
+      else g.setAttribute('hidden', '');
     });
 
-    if (loaded === total) callback();
-  }
-
-  function updateDots() {
-    const dots = dotsContainer.querySelectorAll('.carousel-dot');
-    dots.forEach(d => d.classList.remove('active'));
-    if (dots[currentIndex]) dots[currentIndex].classList.add('active');
-  }
-
-  function updateCarousel() {
-    const activeSlide = slides[currentIndex];
-    const containerCenter = container.offsetWidth / 2;
-    const slideCenter = activeSlide.offsetLeft + activeSlide.offsetWidth / 2;
-    const scrollPosition = slideCenter - containerCenter;
-
-    track.style.transform = `translateX(${-scrollPosition}px)`;
-
-    slides.forEach(s => s.classList.remove('active'));
-    activeSlide.classList.add('active');
-
-    updateDots();
-    setCarouselHeight();
-  }
-
-  function pauseAutoplay() {
-    if (autoplay) clearInterval(autoplay);
-    autoplay = null;
-  }
-
-  function startAutoplay() {
-    if (autoplay || userInteracted) return;
-    autoplay = setInterval(() => {
-      currentIndex = (currentIndex + 1) % slides.length;
-      updateCarousel();
-    }, 3000);
-  }
-
-  // Dots
-  dotsContainer.innerHTML = '';
-  slides.forEach((_, index) => {
-    const dot = document.createElement('button');
-    dot.classList.add('carousel-dot');
-    if (index === 0) dot.classList.add('active');
-    dotsContainer.appendChild(dot);
-
-    dot.addEventListener('click', () => {
-      currentIndex = index;
-      updateCarousel();
+    // toggle buttons (ARIA + styles)
+    buttons.forEach(btn => {
+      const active = btn.dataset.show === key;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      btn.tabIndex = active ? 0 : -1;
     });
-  });
 
-  // Click on slide to center it
-  slides.forEach((slide, index) => {
-    slide.addEventListener('click', () => {
-      if (index !== currentIndex) {
-        currentIndex = index;
-        updateCarousel();
-      }
-    });
-  });
-
-  // Buttons
-  prevBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-    updateCarousel();
-    userInteracted = true;
-    pauseAutoplay();
-  });
-
-  nextBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % slides.length;
-    updateCarousel();
-    userInteracted = true;
-    pauseAutoplay();
-  });
-
-  // Swipe
-  track.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-  }, { passive: true });
-
-  track.addEventListener('touchend', (e) => {
-    const endX = e.changedTouches[0].clientX;
-    const deltaX = endX - startX;
-
-    if (deltaX > 50) {
-      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-      updateCarousel();
-    } else if (deltaX < -50) {
-      currentIndex = (currentIndex + 1) % slides.length;
-      updateCarousel();
+    // refresh visible carousel (po przełączeniu)
+    const wrapper = document.querySelector(`#projects .projects-group[data-group="${key}"] .carousel-wrapper`);
+    if (wrapper && wrapper._carouselApi && typeof wrapper._carouselApi.refresh === 'function') {
+      wrapper._carouselApi.refresh();
     }
-    userInteracted = true;
-    pauseAutoplay();
+  }
+
+  // click
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => show(btn.dataset.show));
   });
 
-  // Pause autoplay on interaction
-  wrapper.addEventListener('touchstart', () => { userInteracted = true; pauseAutoplay(); }, { passive: true });
-  wrapper.addEventListener('mousedown', () => { userInteracted = true; pauseAutoplay(); });
+  // keyboard (← →)
+  switchEl.addEventListener('keydown', (e) => {
+    const currentIndex = buttons.findIndex(b => b.classList.contains('is-active'));
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
 
-  // Autoplay only when visible
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) startAutoplay();
-      else pauseAutoplay();
-    });
-  }, { threshold: 0.25 });
+    e.preventDefault();
+    const nextIndex =
+      e.key === 'ArrowRight'
+        ? (currentIndex + 1) % buttons.length
+        : (currentIndex - 1 + buttons.length) % buttons.length;
 
-  observer.observe(wrapper);
-
-  // Init (after images)
-  ensureImagesLoaded(() => {
-    setCarouselHeight();
-    updateCarousel();
-  });
-
-  window.addEventListener('resize', () => {
-    setCarouselHeight();
-    updateCarousel();
+    buttons[nextIndex].focus();
+    show(buttons[nextIndex].dataset.show);
   });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+      function initCarousel(wrapper) {
+      const track = wrapper.querySelector('.carousel-track');
+      const slides = track ? Array.from(track.children) : [];
+      const prevBtn = wrapper.querySelector('.carousel-btn.prev');
+      const nextBtn = wrapper.querySelector('.carousel-btn.next');
+      const dotsContainer = wrapper.querySelector('.carousel-dots');
+      const container = wrapper.querySelector('.carousel-track-container');
+    
+      if (!track || slides.length === 0 || !prevBtn || !nextBtn || !dotsContainer || !container) return;
+    
+      let currentIndex = 0;
+      let startX = 0;
+      let userInteracted = false;
+      let autoplay = null;
+    
+      function setCarouselHeight() {
+        let maxHeight = 0;
+        slides.forEach(slide => {
+          slide.style.height = 'auto';
+          const h = slide.offsetHeight;
+          if (h > maxHeight) maxHeight = h;
+        });
+        wrapper.style.height = `${maxHeight}px`;
+        container.style.height = `${maxHeight}px`;
+      }
+    
+      function ensureImagesLoaded(callback) {
+        const images = wrapper.querySelectorAll('.carousel-slide img');
+        let loaded = 0;
+        const total = images.length;
+        if (total === 0) { callback(); return; }
+    
+        images.forEach(img => {
+          if (img.complete) {
+            loaded++;
+          } else {
+            img.addEventListener('load', () => {
+              loaded++;
+              if (loaded === total) callback();
+            });
+            img.addEventListener('error', () => {
+              loaded++;
+              if (loaded === total) callback();
+            });
+          }
+        });
+    
+        if (loaded === total) callback();
+      }
+    
+      function updateDots() {
+        const dots = dotsContainer.querySelectorAll('.carousel-dot');
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[currentIndex]) dots[currentIndex].classList.add('active');
+      }
+    
+      function updateCarousel() {
+        const activeSlide = slides[currentIndex];
+        const containerCenter = container.offsetWidth / 2;
+        const slideCenter = activeSlide.offsetLeft + activeSlide.offsetWidth / 2;
+        const scrollPosition = slideCenter - containerCenter;
+    
+        track.style.transform = `translateX(${-scrollPosition}px)`;
+    
+        slides.forEach(s => s.classList.remove('active'));
+        activeSlide.classList.add('active');
+    
+        updateDots();
+        setCarouselHeight();
+      }
+    
+      function pauseAutoplay() {
+        if (autoplay) clearInterval(autoplay);
+        autoplay = null;
+      }
+    
+      function startAutoplay() {
+        if (autoplay || userInteracted) return;
+        autoplay = setInterval(() => {
+          currentIndex = (currentIndex + 1) % slides.length;
+          updateCarousel();
+        }, 3000);
+      }
+    
+      // Dots
+      dotsContainer.innerHTML = '';
+      slides.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.classList.add('carousel-dot');
+        if (index === 0) dot.classList.add('active');
+        dotsContainer.appendChild(dot);
+    
+        dot.addEventListener('click', () => {
+          currentIndex = index;
+          updateCarousel();
+        });
+      });
+    
+      // Click on slide to center it
+      slides.forEach((slide, index) => {
+        slide.addEventListener('click', () => {
+          if (index !== currentIndex) {
+            currentIndex = index;
+            updateCarousel();
+          }
+        });
+      });
+    
+      // Buttons
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateCarousel();
+        userInteracted = true;
+        pauseAutoplay();
+      });
+    
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateCarousel();
+        userInteracted = true;
+        pauseAutoplay();
+      });
+    
+      // Swipe
+      track.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+      }, { passive: true });
+    
+      track.addEventListener('touchend', (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const deltaX = endX - startX;
+    
+        if (deltaX > 50) {
+          currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+          updateCarousel();
+        } else if (deltaX < -50) {
+          currentIndex = (currentIndex + 1) % slides.length;
+          updateCarousel();
+        }
+        userInteracted = true;
+        pauseAutoplay();
+      });
+    
+      // Pause autoplay on interaction
+      wrapper.addEventListener('touchstart', () => { userInteracted = true; pauseAutoplay(); }, { passive: true });
+      wrapper.addEventListener('mousedown', () => { userInteracted = true; pauseAutoplay(); });
+    
+      // Autoplay only when visible
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) startAutoplay();
+          else pauseAutoplay();
+        });
+      }, { threshold: 0.25 });
+    
+      observer.observe(wrapper);
+    
+      // Init (after images)
+      ensureImagesLoaded(() => {
+        setCarouselHeight();
+        updateCarousel();
+      });
+
+      wrapper._carouselApi = {
+        refresh: () => {
+          setCarouselHeight();
+          updateCarousel();
+        }
+      };
+
+    
+      window.addEventListener('resize', () => {
+        setCarouselHeight();
+        updateCarousel();
+      });
+    }
+  document.querySelectorAll('#projects .carousel-wrapper').forEach(initCarousel);
+
+  // switch
+  initProjectsSwitch();
+});
+
+  
   
 
   
@@ -932,6 +1006,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
 </body>
 </html>
+
 
 
 
