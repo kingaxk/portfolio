@@ -115,7 +115,7 @@
 
     <!-- Segmented switch -->
     <div class="projects-switch" role="tablist" aria-label="Project categories">
-      <button class="switch-btn is-active" role="tab" aria-selected="true" tabindex="0" data-show="UX process">
+      <button class="switch-btn is-active" role="tab" aria-selected="true" tabindex="0" data-show="UX-process">
         UX research & process optimization
       </button>
       <button class="switch-btn" role="tab" aria-selected="false" tabindex="-1" data-show="data">
@@ -134,8 +134,8 @@
 
 
     <!-- #1 Analiza doświadczeń i optymalizacje procesów -->
-    <div class="projects-group is-visible" data-group="UX process">
-      <div class="carousel-wrapper" data-carousel="UX process">
+    <div class="projects-group is-visible" data-group="UX-process">
+      <div class="carousel-wrapper" data-carousel="UX-process">
         <div class="carousel-track-container">
           <div class="carousel-track">
 
@@ -237,7 +237,7 @@
                 <img src="images/projects/employee_exp_NPS.png" alt="AI feedback script" class="slide-image">
                 <div class="slide-text">
                   <h3>Employee experience data processing</h3>
-                  <p><span style="color: gray;">Goal:</span> Transforming raw survey data from 1000 respondents into an insightful, accessible visualizations. Including NPS calculations and statistical significance verification.
+                  <p><span style="color: gray;">Goal:</span> Transforming raw survey data from 1000 respondents into an insightful, accessible visualizations. Including NPS calculations and statistical significance verification.</p>
                   <p><span style="color: gray;">Effect:</span>  Clear charts and comparisons that help readers quickly spot significant differences and grasp key trends.</p>
                 </div>
               </div>
@@ -662,59 +662,7 @@ function erasePhrase() {
     document.getElementById('progress-bar').style.width = `${scrollProgress}%`;
   });
   
-  // Carousel logic
-function initProjectsSwitch() {
-  const switchEl = document.querySelector('#projects .projects-switch');
-  if (!switchEl) return;
-
-  const buttons = Array.from(switchEl.querySelectorAll('.switch-btn'));
-  const groups = Array.from(document.querySelectorAll('#projects .projects-group'));
-
-  function show(key) {
-    // toggle groups
-    groups.forEach(g => {
-      const match = g.dataset.group === key;
-      if (match) g.removeAttribute('hidden');
-      else g.setAttribute('hidden', '');
-    });
-
-    // toggle buttons (ARIA + styles)
-    buttons.forEach(btn => {
-      const active = btn.dataset.show === key;
-      btn.classList.toggle('is-active', active);
-      btn.setAttribute('aria-selected', active ? 'true' : 'false');
-      btn.tabIndex = active ? 0 : -1;
-    });
-
-    // refresh visible carousel (po przełączeniu)
-    const wrapper = document.querySelector(`#projects .projects-group[data-group="${key}"] .carousel-wrapper`);
-    if (wrapper && wrapper._carouselApi && typeof wrapper._carouselApi.refresh === 'function') {
-      wrapper._carouselApi.refresh();
-    }
-  }
-
-  // click
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => show(btn.dataset.show));
-  });
-
-  // keyboard (← →)
-  switchEl.addEventListener('keydown', (e) => {
-    const currentIndex = buttons.findIndex(b => b.classList.contains('is-active'));
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-
-    e.preventDefault();
-    const nextIndex =
-      e.key === 'ArrowRight'
-        ? (currentIndex + 1) % buttons.length
-        : (currentIndex - 1 + buttons.length) % buttons.length;
-
-    buttons[nextIndex].focus();
-    show(buttons[nextIndex].dataset.show);
-  });
-}  
-
-  
+ 
   // Mobile menu
   const menuToggle = document.querySelector('.menu-toggle');
   const navLinks = document.querySelector('.nav-links');
@@ -1028,6 +976,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
 </body>
 </html>
+
 
 
 
