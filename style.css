@@ -775,6 +775,16 @@ input:focus, textarea:focus {
 }
 
 /* === CAROUSEL === */
+
+.projects-group {
+  margin-top: 48px;
+}
+
+.projects-group-title {
+  margin: 24px 0 16px;
+}
+
+
 #projects h2 {
   margin-bottom: 0;
 }
@@ -1141,6 +1151,7 @@ width: 100%;
   margin-top: 15px;
   display: inline-block;
 }
+
 
 
 
